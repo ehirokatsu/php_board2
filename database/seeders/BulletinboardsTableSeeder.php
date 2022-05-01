@@ -17,17 +17,19 @@ class BulletinboardsTableSeeder extends Seeder
     {
         $param = [
             'post_text' => 'cat111',
+            'send_date' => '2022-04-30 11:18:11',
             'post_image_id' => 0,
-            'send_user_id' => 0,
+            'send_user_id' => 1,
             'reply_flag' => false,
         ];
         DB::table('bulletinboards')->insert($param);
      
         $param = [
             'post_text' => 'cat222',
+            'send_date' => '2022-04-30 11:31:11',
             'post_image_id' => 0,
-            'send_user_id' => 0,
-            'reply_flag' => false,
+            'send_user_id' => 1,
+            'reply_flag' => true,
         ];
         DB::table('bulletinboards')->insert($param);
     }
