@@ -10,19 +10,19 @@
 @section('content')
 
     <!-- 投稿フォーム -->
-    <form action="" method="post" name="post_text" enctype="multipart/form-data">
+    <form action="/board" method="post" name="post_text" enctype="multipart/form-data">
 
             <textarea id="post_text" name="post_text" cols="60" rows="8"
              maxlength=140></textarea >
         </div>
         <div class="item_post_file">
-            添付ファイル(1M以内)：<input type="file" name="yourfile">
+            <!--添付ファイル(1M以内)：<input type="file" name="yourfile">-->
         </div>
           <div class="item_post"></div>
         <div class="item_post">
             <input type="submit" value="投稿する">
         </div>
-
+        
         <table>
    <tr><th>Data</th></tr>
    @foreach ($items as $item)
