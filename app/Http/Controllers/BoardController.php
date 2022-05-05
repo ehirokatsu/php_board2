@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Board;
+use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 
 class BoardController extends Controller
@@ -27,8 +28,13 @@ class BoardController extends Controller
 */
 
 
-        $items = Board::all();
+        //$items = Board::all();
+
+        $items = Board::with('user')->get();
+        $items = Board::with('post')->get();
         return view('Board.index',['items' => $items]);
+
+
     }
     public function add(Request $request)
     {
@@ -37,11 +43,34 @@ class BoardController extends Controller
     
     public function create(Request $request)
     {
+
+        $user_id = 1;
+        //現在日時を取得する
+        date_default_timezone_set('Asia/Tokyo');
+        $today = date("Y-m-d H:i:s");
+
        $this->validate($request, Board::$rules);
-       $person = new Board;
+       $board = new Board;
+       /*
        $form = $request->all();
        unset($form['_token']);
-       $person->fill($form)->save();
+       $board->fill($form)
+       */
+       $board->post_text = $request->post_text;
+       $board->send_date = $today;
+       $board->user_id = $user_id;
+       $board->save();
+
+       $post = new Post;
+       $post->post_id = $board->id;
+       $post->reply_flag = false;
+
+       
+       $post->save();
+       
+
+
+
        return redirect('/board');
     }
 

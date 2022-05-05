@@ -17,12 +17,17 @@ class Board extends Model
 
     public function getData()
     {
-        return $this->id . ': ' . $this->post_text . ' (' . $this->send_date . ')' . $this->user->user_name;
+        return $this->id . ': ' . $this->post_text . ' (' . $this->send_date . ')' . $this->user->user_name . ': ' . $this->post->reply_flag;
     }
 
     public function user()
     {
-   return $this->belongsTo('App\Models\user');
+        return $this->belongsTo('App\Models\user');
     }
 
+
+    public function post()
+    {
+        return $this->hasOne('App\Models\post','post_id', 'id');
+    }
 }
