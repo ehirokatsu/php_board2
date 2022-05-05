@@ -19,7 +19,6 @@ class UsersTableSeeder extends Seeder
            'user_name' => 'cat',
            'user_mail' => 'cat@cat.com',
            'user_pass' => 'cat',
-           'user_image_id' => 0,
        ];
        DB::table('users')->insert($param);
     
@@ -27,7 +26,6 @@ class UsersTableSeeder extends Seeder
         'user_name' => 'dog',
         'user_mail' => 'dog@dog.com',
         'user_pass' => 'dog',
-        'user_image_id' => 0,
     ];
     DB::table('users')->insert($param);
     }

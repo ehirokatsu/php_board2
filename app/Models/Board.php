@@ -17,6 +17,12 @@ class Board extends Model
 
     public function getData()
     {
-        return $this->post_id . ': ' . $this->post_text . ' (' . $this->send_date . ')';
+        return $this->id . ': ' . $this->post_text . ' (' . $this->send_date . ')' . $this->user->user_name;
     }
+
+    public function user()
+    {
+   return $this->belongsTo('App\Models\user');
+    }
+
 }
