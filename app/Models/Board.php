@@ -11,10 +11,11 @@ class Board extends Model
 
     protected $guarded = array('post_id');
 
+    /*
     public static $rules = array(
        'post_text' => 'required',
     );
-
+*/
     public function getData()
     {
         return $this->id . ': ' . $this->post_text . ' (' . $this->send_date . ')' . $this->user->user_name . ': ' . $this->post->reply_flag;

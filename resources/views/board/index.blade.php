@@ -1,51 +1,40 @@
-@extends('layouts.helloapp')
-
-@section('title', 'Bulletinboard.index')
-
-@section('menubar')
-   @parent
-   インデックスページ
-@endsection
-
+@extends('board/layout')
 @section('content')
-
-    <!-- 投稿フォーム -->
-    <form action="/board" method="post" name="post_text" enctype="multipart/form-data">
-        @csrf
-            <textarea id="post_text" name="post_text" cols="60" rows="8"
-             maxlength=140></textarea >
-        </div>
-        <div class="item_post_file">
-            <!--添付ファイル(1M以内)：<input type="file" name="yourfile">-->
-        </div>
-          <div class="item_post"></div>
-        <div class="item_post">
-            <input type="submit" value="投稿する">
-        </div>
-        
-        <table>
-
-   <table>
-   <tr><th>Message</th><th>Name</th><th>Replyflag</th><th>reply</th><th>delete</th></tr>
-   @foreach ($items as $item)
-       <tr>
-           <td>{{$item->post_text}}</td>
-           <td>{{$item->user->user_name}}</td>
-           <td>{{$item->post->reply_flag}}</td>
-           <td>
-               <input type="radio" id="reply{{$item->id}}"name="reply" value="{{$item->id}}">
-               <label for="reply{{$item->id}}">返信</label>
-            </td>
-            <td>
-            <button type="submit" id="delete" name="delete"
-             value="{{$item->id}}">削除</button>
-            </td>
-       </tr>
-   @endforeach
-   </table>
-</form>
-@endsection
-
-@section('footer')
-copyright 2020 tuyano.
+<div class="container ops-main">
+<div class="row">
+  <div class="col-md-12">
+    <h3 class="ops-title">投稿一覧</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-11 col-md-offset-1">
+    <table class="table text-center">
+      <tr>
+        <th class="text-center">ID</th>
+        <th class="text-center">投稿内容</th>
+        <th class="text-center">reply_flag</th>
+        <th class="text-center">投稿ユーザ</th>
+        <th class="text-center">削除</th>
+      </tr>
+      @foreach($boards as $board)
+      <tr>
+        <td>
+          <a href="/board/{{ $board->id }}/edit">{{ $board->id }}</a>
+        </td>
+        <td>{{ $board->post_text }}</td>
+        <td>{{ $board->post->reply_flag }}</td>
+        <td>{{ $board->user->user_name }}</td>
+        <td>
+          <form action="/board/{{ $board->id }}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-xs btn-danger" aria-label="Left Align"><span class="glyphicon glyphicon-trash"></span></button>
+          </form>
+        </td>
+      </tr>
+      @endforeach
+    </table>
+    <div><a href="/board/create" class="btn btn-default">新規作成</a></div>
+  </div>
+</div>
 @endsection

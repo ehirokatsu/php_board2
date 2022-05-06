@@ -6,72 +6,78 @@ use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\BoardRequest;
 
 class BoardController extends Controller
 {
     public function index(Request $request)
     {
-/*
-        $param = [
-            'send_date' => '2022-04-17 21:03:16',
-            'post_text' => 'test',
-        ];
-        DB::insert('insert into boards (send_date, post_text)
-        values (:send_date, :post_text)', $param);
-
-        $param = [
-            'user_id' => 1,
-            'post_id' => 1,
-        ];
-        DB::insert('insert into userboards (send_date, post_text)
-        values (:send_date, :post_text)', $param);
-*/
-
-
-        //$items = Board::all();
-
-        $items = Board::with('user')->get();
-        $items = Board::with('post')->get();
-        return view('Board.index',['items' => $items]);
-
-
+        $boards = Board::with('user')->get();
+        $boards = Board::with('post')->get();
+        return view('Board.index',['boards' => $boards]);
     }
-    public function add(Request $request)
+
+    public function edit($id)
     {
-       return view('Board.add');
+        // DBよりURIパラメータと同じIDを持つboardの情報を取得
+        $board = board::findOrFail($id);
+  
+        // 取得した値をビュー「board/edit」に渡す
+        return view('board/edit', compact('board'));
+    }
+  
+  
+    public function destroy($id)
+    {
+        $board = board::findOrFail($id);
+        $board->delete();
+    
+        return redirect("/board");
+    }
+    public function create()
+    {
+        // 空の$boardを渡す
+        $board = new board();
+        return view('board/create', compact('board'));
     }
     
-    public function create(Request $request)
+    public function store(BoardRequest $request)
     {
-
         $user_id = 1;
+
         //現在日時を取得する
         date_default_timezone_set('Asia/Tokyo');
         $today = date("Y-m-d H:i:s");
 
-       $this->validate($request, Board::$rules);
-       $board = new Board;
-       /*
-       $form = $request->all();
-       unset($form['_token']);
-       $board->fill($form)
-       */
-       $board->post_text = $request->post_text;
-       $board->send_date = $today;
-       $board->user_id = $user_id;
-       $board->save();
+        //$this->validate($request, Board::$rules);
+        $board = new Board;
 
-       $post = new Post;
-       $post->post_id = $board->id;
-       $post->reply_flag = false;
+        $board->post_text = $request->post_text;
+        $board->send_date = $today;
+        $board->user_id = $user_id;
+        $board->save();
 
-       
-       $post->save();
-       
+        $post = new Post;
+        $post->post_id = $board->id;
+        $post->reply_flag = false;
+        
+        $post->save();
 
-
-
-       return redirect('/board');
+        return redirect("/board");
     }
+    
+    public function update(BoardRequest $request, $id)
+    {
+        //現在日時を取得する
+        date_default_timezone_set('Asia/Tokyo');
+        $today = date("Y-m-d H:i:s");
 
+        $board = board::findOrFail($id);
+        $board->post_text = $request->post_text;
+        $board->send_date = $today;
+        $board->save();
+    
+        return redirect("/board");
+    }
+    
 }
