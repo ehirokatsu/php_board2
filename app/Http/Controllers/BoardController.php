@@ -7,14 +7,23 @@ use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BoardRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BoardController extends Controller
 {
     public function index(Request $request)
     {
+
+        $user = Auth::user();
+        $sort = $request->sort;
+        //$items = Person::orderBy($sort, 'asc')->simplePaginate(5);
+        
+
         $boards = Board::with('user')->get();
         $boards = Board::with('post')->get();
-        return view('Board.index',['boards' => $boards]);
+        $param = ['boards' => $boards, 'sort' => $sort, 'user' => $user];
+
+        return view('Board.index',$param);
     }
 
     public function edit($id)

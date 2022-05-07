@@ -20,7 +20,7 @@ class Board extends Model
     {
         return $this->id . ': ' . $this->post_text . ' (' . $this->send_date . ')' . $this->user->user_name . ': ' . $this->post->reply_flag;
     }
-
+    
     public function user()
     {
         return $this->belongsTo('App\Models\user');

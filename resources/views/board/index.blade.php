@@ -1,5 +1,11 @@
 @extends('board/layout')
 @section('content')
+@if (Auth::check())
+<p>USER: {{$user->name . ' (' . $user->email . ')'}}</p>
+@else
+<p>※ログインしていません。（<a href="/login">ログイン</a>｜
+   <a href="/register">登録</a>）</p>
+@endif
 <div class="container ops-main">
 <div class="row">
   <div class="col-md-12">
@@ -23,7 +29,7 @@
         </td>
         <td>{{ $board->post_text }}</td>
         <td>{{ $board->post->reply_flag }}</td>
-        <td>{{ $board->user->user_name }}</td>
+        <td>{{ $board->user->name }}</td>
         <td>
           <form action="/board/{{ $board->id }}" method="post">
             <input type="hidden" name="_method" value="DELETE">

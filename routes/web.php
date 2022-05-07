@@ -20,4 +20,8 @@ Route::get('board/add', 'App\Http\Controllers\BoardController@add');
 
 Route::post('board/add', 'App\Http\Controllers\BoardController@create');
 */
-Route::resource('board', 'App\Http\Controllers\boardController');
+Route::resource('board', 'App\Http\Controllers\boardController')->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
