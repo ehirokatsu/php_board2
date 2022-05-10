@@ -20,8 +20,15 @@ Route::get('board/add', 'App\Http\Controllers\BoardController@add');
 
 Route::post('board/add', 'App\Http\Controllers\BoardController@create');
 */
-Route::resource('board', 'App\Http\Controllers\boardController')->middleware('auth');
+
+//showを制限しないと、board/replyにアクセスしたときにshowと判定されてしまう
+Route::resource('board', 'App\Http\Controllers\boardController', 
+['only' => ['index', 'create', 'edit', 'store', 'destroy', 'update']])->middleware('auth');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('board/{id}/reply', 'App\Http\Controllers\BoardController@reply')->middleware('auth');
+
+Route::post('board/reply', 'App\Http\Controllers\BoardController@replyStore')->middleware('auth');

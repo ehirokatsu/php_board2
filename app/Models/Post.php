@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    
+    //デフォルトだと主キーはidになるから変更
+    protected $primaryKey = 'post_id';
 
     public function getData()
     {

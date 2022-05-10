@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Post;
+use App\Models\Reply;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BoardRequest;
 use Illuminate\Support\Facades\Auth;
@@ -50,9 +51,19 @@ class BoardController extends Controller
         return view('board/create', compact('board'));
     }
     
+    public function reply($id)
+    {
+        //先にwithで結合してからfindしないとエラーになる
+        $board = Board::with('post')->get();
+        $board = Board::with('user')->get();
+        $board = Board::findOrFail($id);
+        //
+        return view('board/reply', compact('board'));
+    }
+
     public function store(BoardRequest $request)
     {
-        $user_id = 1;
+        $user = Auth::user();
 
         //現在日時を取得する
         date_default_timezone_set('Asia/Tokyo');
@@ -63,7 +74,7 @@ class BoardController extends Controller
 
         $board->post_text = $request->post_text;
         $board->send_date = $today;
-        $board->user_id = $user_id;
+        $board->user_id = $user->id;
         $board->save();
 
         $post = new Post;
@@ -74,7 +85,41 @@ class BoardController extends Controller
 
         return redirect("/board");
     }
-    
+
+    public function replyStore(BoardRequest $request)
+    {
+        $user = Auth::user();
+        //投稿元のreplyfragをtrueにする
+        //post.phpｍにて主キー名を変更する必要あり
+        $post = Post::findOrFail($request->_src_id);
+        $post->reply_flag = true;
+        $post->save();
+
+        //現在日時を取得する
+        date_default_timezone_set('Asia/Tokyo');
+        $today = date("Y-m-d H:i:s");
+        //boardテーブルをinsertする
+        $board = new Board;
+        $board->post_text = $request->post_text;
+        $board->send_date = $today;
+        $board->user_id = $user->id;
+        $board->save();
+
+        //postテーブルをinsertする
+        $post = new Post;
+        $post->post_id = $board->id;
+        $post->reply_flag = false;
+        $post->save();
+
+        //replyテーブルをinsertする
+        $reply = new Reply;
+        $reply->post_id = $board->id;
+        $reply->src_post_id = $request->_src_id;
+        $reply->save();
+        
+        return redirect("/board");
+    }
+
     public function update(BoardRequest $request, $id)
     {
         //現在日時を取得する

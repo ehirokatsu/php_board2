@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bulletinboards', function (Blueprint $table) {
-            $table->increments('post_id');
-            $table->string('post_text');
-            $table->datetime('send_date');
-            $table->bigInteger('post_image_id');
-            $table->bigInteger('send_user_id');
-            $table->boolean('reply_flag');
+        Schema::create('replies', function (Blueprint $table) {
+            $table->bigInteger('post_id')->unsigned();
+            $table->bigInteger('src_post_id')->unsigned();
+            $table->primary('post_id');
+            $table->foreign('post_id')->references('id')->on('boards')->onDelete('CASCADE');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bulletinboards');
+        Schema::dropIfExists('replies');
     }
 };
