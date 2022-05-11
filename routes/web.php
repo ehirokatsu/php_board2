@@ -23,12 +23,12 @@ Route::post('board/add', 'App\Http\Controllers\BoardController@create');
 
 //showを制限しないと、board/replyにアクセスしたときにshowと判定されてしまう
 Route::resource('board', 'App\Http\Controllers\boardController', 
-['only' => ['index', 'create', 'edit', 'store', 'destroy', 'update']])->middleware('auth');
+['only' => ['index', 'show', 'create', 'edit', 'store', 'destroy', 'update']])->middleware('auth');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('board/{id}/reply', 'App\Http\Controllers\BoardController@reply')->middleware('auth');
+Route::get('board/{id}/reply', 'App\Http\Controllers\BoardController@replyshow')->middleware('auth');
 
 Route::post('board/reply', 'App\Http\Controllers\BoardController@replyStore')->middleware('auth');

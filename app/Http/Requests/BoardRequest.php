@@ -13,12 +13,16 @@ class BoardRequest extends FormRequest
      */
     public function authorize()
     {
+        /*
         if ($this->path() ===  'board' || $this->path() ===  'board/reply')
         {
             return true;
+
         } else {
             return false;
         }
+        */
+        return true;
     }
 
     /**
@@ -30,6 +34,7 @@ class BoardRequest extends FormRequest
     {
         return [
             'post_text' => 'required|max:140',
+            'image' => 'file|image|mimes:jpeg,png,jpg,gif|max:2048'
 
         ];
     }

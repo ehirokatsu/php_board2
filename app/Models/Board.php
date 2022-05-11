@@ -31,4 +31,14 @@ class Board extends Model
     {
         return $this->hasOne('App\Models\post','post_id', 'id');
     }
+
+    public function reply()
+    {
+        return $this->hasOne('App\Models\reply','post_id', 'id');
+    }
+
+    public function boardimage()
+    {
+        return $this->hasOne('App\Models\boardimage','post_id', 'id');
+    }
 }
