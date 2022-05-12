@@ -27,6 +27,7 @@ class BoardController extends Controller
         $boards = Board::with('reply')->get();
         $boards = Board::with('boardimage')->get();
 
+
         $param = ['boards' => $boards, 'sort' => $sort, 'user' => $user];
 
         return view('Board.index',$param);
@@ -41,16 +42,17 @@ class BoardController extends Controller
         return view('board/edit', compact('board'));
     }
   
-  
     public function destroy($id)
     {
+        //投稿を削除する
         $board = board::findOrFail($id);
         $board->delete();
 
+        //投稿に画像があれば削除する
         if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
-            //\Storage::disk('public/images')->delete($id . '.jpg');
             Storage::disk('local')->delete('public/images/' . $id . '.jpg');
         }
+
         return redirect("/board");
     }
     public function create()
@@ -75,16 +77,12 @@ class BoardController extends Controller
     public function store(BoardRequest $request)
     {
 
-
-        $lastInsertBoardId = $this->insert($request->post_text);
+        //boardとpostテーブルに挿入する
+        $lastInsertBoardId = $this->insertBoard($request->post_text);
 
         //画像保存
         if (!empty($request->image)) {
-            $request->image->storeAs('public/images', $lastInsertBoardId . '.jpg');
-            $boardimage = new Boardimage;
-            $boardimage->post_id = $lastInsertBoardId;
-            $boardimage->image_name = $lastInsertBoardId . '.jpg';
-            $boardimage->save();
+            $this->imageSave($lastInsertBoardId, $request);
         }
 
         return redirect("/board");
@@ -99,8 +97,8 @@ class BoardController extends Controller
         $post->reply_flag = true;
         $post->save();
 
-        //投稿内容をinsertする
-        $lastInsertBoardId = $this->insert($request->post_text);
+        //boardとpostテーブルに挿入する
+        $lastInsertBoardId = $this->insertBoard($request->post_text);
 
         //返信なのでreplyテーブルにinsertする
         $reply = new Reply;
@@ -111,11 +109,7 @@ class BoardController extends Controller
         
         //画像保存
         if (!empty($request->image)) {
-            $request->image->storeAs('public/images', $lastInsertBoardId . '.jpg');
-            $boardimage = new Boardimage;
-            $boardimage->post_id = $lastInsertBoardId;
-            $boardimage->image_name = $lastInsertBoardId . '.jpg';
-            $boardimage->save();
+            $this->imageSave($lastInsertBoardId, $request);
         }
 
         return redirect("/board");
@@ -166,7 +160,7 @@ class BoardController extends Controller
         return view('board/show', compact('board'));
     }
 
-    public function insert($post_text)
+    public function insertBoard($post_text)
     {
         //ログイン中のユーザ名を取得する
         $user = Auth::user();
@@ -192,4 +186,13 @@ class BoardController extends Controller
 
     }
     
+    public function imageSave($lastInsertBoardId, $request)
+    {
+        $request->image->storeAs('public/images', $lastInsertBoardId . '.jpg');
+        $boardimage = new Boardimage;
+        $boardimage->post_id = $lastInsertBoardId;
+        $boardimage->image_name = $lastInsertBoardId . '.jpg';
+        $boardimage->save();
+    }
+
 }

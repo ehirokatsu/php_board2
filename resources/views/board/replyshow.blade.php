@@ -11,6 +11,11 @@
             <label for="name">投稿者:{{$board->user->name}}
             </label>
             <br>
+            @if(Storage::disk('local')->exists('public/profile/' . $board->user->id . '.jpg'))
+            <figure>
+                <img src="/storage/profile/{{$board->user-> id}}.jpg" width="100px" height="100px">
+            </figure>
+            @endif
             <label for="name">{{$board->post_text}}
             </label>
             @if(!empty($board->boardimage->image_name))
