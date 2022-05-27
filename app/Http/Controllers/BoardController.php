@@ -70,8 +70,10 @@ class BoardController extends Controller
         $board = Board::with('boardimage')->get();
         $board = Board::findOrFail($id);
 
+        $user = Auth::user();
+        $param = ['board' => $board, 'user' => $user];
 
-        return view('board/replyshow', compact('board'));
+        return view('board/replyshow', $param);
     }
 
     public function store(BoardRequest $request)
