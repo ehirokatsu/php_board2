@@ -1,4 +1,17 @@
 @extends('board/layout')
+<style>
+    .imagePreviewPre {
+    }
+    .imagePreview {
+        width: 180px;
+        height: 300px;
+        background-position: center center;
+        background-size: cover;
+        -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+        display: inline-block;
+    }
+</style>
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -65,24 +78,56 @@
 				<div class="col-lg-3">
                     <!--名前は左揃えにする-->
                     <div class="text-start font-weight-bold fs-4">
-                    {{ $user->name }}
+                        {{ $user->name }}
+                    </div>
+                </div>
+                <!--名前右スペースダミー-->
+                <div class="col-lg-9">
                 </div>
             </div>
-            <div class="col-lg-5">
-            </div>
-            <div class="col-lg-4">
-			</div>
-		</div>
-		<div class="row">
             <form action="/board/reply" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="_src_id" value="{{ $board->id }}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="form-group">
-                    <input type="textarea" class="form-control" name="post_text" value="" cols="60" rows="8" maxlength=140>
+            <!--<div class="input-group">-->
+		    <div class="row">
+                
+                    <input type="hidden" name="_src_id" value="{{ $board->id }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="form-group">
+                        <input type="textarea" class="form-control" name="post_text" value="" cols="60" rows="8" maxlength=140>
+                    </div>
+                
+            </div>
+            <div class="row" style="padding:15px;">
+                <div class="imagePreviewPre">
                 </div>
-                <input type="file" name="image">
-                <button type="submit" class="btn btn-default">投稿</button>
-                <a href="/board">戻る</a>
+            </div>
+
+            <div class="row">
+                <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
+<!--
+                    <input type="file" class="custom-file-input" name="image">
+-->
+                    <label class="input-group-btn">
+                        <span class="btn btn-primary">
+                                画像<input type="file" name="image" style="display:none" class="uploadFile">
+                        </span>
+                    </label>
+                    <!--
+                    <input type="text" class="form-control" readonly="">
+-->
+                </div>
+                <div class="col-3 col-lg-3">
+                </div>
+                <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
+                    <button type="submit" class="btn btn-primary">投稿する</button>
+                </div>
+                
+                <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
+                    <a href="/board" class="btn btn-light" >
+                        <span class="small text-secondary">戻る</span>
+                    </a>
+                </div>
+            </div>
+            <!--</div>-->
             </form>
 		</div>
         <div class="col-1 col-lg-3">
@@ -90,7 +135,62 @@
     </div>
 </div>
 
+<label>
+<span class="btn btn-primary">
+    画像
+    <input type="file" style="display:none">
+</span>
+</label>
+<div class="text">aaa</div>
 
+<div class="container page-header">
+            <div class="col-sm-4">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="imagePreview">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                Choose File<input type="file" style="display:none" class="uploadFile">
+                            </span>
+                        </label>
+                        <input type="text" class="form-control" readonly="">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-->
+        <script>
+            /*
+        $(function(){
+		    $('.text').mouseover(function(){
+                //$(this).removeClass('hover_off');
+                $('.text').addClass('imagePreview');
+		    });	
+	    });*/
+
+        $(document).on('change', ':file', function() {
+            var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.parent().parent().next(':text').val(label);
+
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+            if (/^image/.test( files[0].type)){ // only image file
+                var reader = new FileReader(); // instance of the FileReader
+                reader.readAsDataURL(files[0]); // read the local file
+                reader.onloadend = function(){ // set image data as background of div
+                    //input.parent().parent().parent().prev('.imagePreview').css("background-image", "url("+this.result+")");
+                    input.parent().parent().parent().parent().prev().children('.imagePreview').css("background-image", "url("+this.result+")");
+                }
+                $('.imagePreviewPre').addClass('imagePreview')
+            }
+        });
+        </script>
 <!--
 <div class="container ops-main">
     <div class="row">
