@@ -51,9 +51,19 @@
 
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-
+                    <a href="/board/{{ $board->id }}/reply" class="btn btn-light" >
+                        <span class="small text-secondary">返信</span>
+                    </a>
                 </div>
-                <div class="col-3 col-lg-3">
+                <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
+                @if(!empty($board->reply->src_post_id))
+                    <a href="/board/{{ $board->reply->src_post_id }}" class="btn btn-light">
+                        <span class="small text-secondary">
+                        <!--{{ $board->reply->src_post_id }}--> 
+                        返信先
+                        </span>
+                    </a>
+                @endif
                 </div>
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                 </div>
