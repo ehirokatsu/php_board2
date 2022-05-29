@@ -35,11 +35,13 @@ class BoardController extends Controller
 
     public function edit($id)
     {
+        $user = Auth::user();
         // DBよりURIパラメータと同じIDを持つboardの情報を取得
         $board = board::findOrFail($id);
   
+        $param = ['board' => $board, 'user' => $user];
         // 取得した値をビュー「board/edit」に渡す
-        return view('board/edit', compact('board'));
+        return view('board/edit', $param);
     }
   
     public function destroy($id)
@@ -57,9 +59,13 @@ class BoardController extends Controller
     }
     public function create()
     {
+
+        $user = Auth::user();
         // 空の$boardを渡す
         $board = new board();
-        return view('board/create', compact('board'));
+
+        $param = ['board' => $board, 'user' => $user];
+        return view('board/create', $param);
     }
     
     public function replyshow($id)

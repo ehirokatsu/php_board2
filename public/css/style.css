@@ -1,0 +1,14 @@
+@charset "UTF-8";
+.imagePreviewPre {
+}
+.imagePreviewEdit {
+}
+.imagePreview {
+    width: 100%;
+    height: 300px;
+    background-position: center center;
+    background-size: cover;
+    -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+    display: inline-block;
+}
+
