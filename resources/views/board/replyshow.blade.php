@@ -9,7 +9,11 @@
             <div class="row">
                 @if(Storage::disk('local')->exists('public/profile/' . $board->user->id . '.jpg'))
                     <figure>
-                        <img src="/storage/profile/{{$board->user-> id}}.jpg" width="50px" height="50px">
+                        <img src="/storage/profile/{{$board->user-> id}}.jpg" width="100px" height="100px">
+                    </figure>
+                @else
+                    <figure>
+                        <img src="/storage/profile/0.jpg" width="100px" height="100px">
                     </figure>
                 @endif
             </div>
@@ -56,7 +60,11 @@
             <div class="row">
                 @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
                     <figure>
-                        <img src="/storage/profile/{{$user-> id}}.jpg" width="50px" height="50px">
+                        <img src="/storage/profile/{{$user-> id}}.jpg" width="100px" height="100px">
+                    </figure>
+                @else
+                    <figure>
+                        <img src="/storage/profile/0.jpg" width="100px" height="100px">
                     </figure>
                 @endif
             </div>
@@ -75,24 +83,21 @@
             </div>
             <form action="/board/reply" method="post" enctype="multipart/form-data">
 		    <div class="row">
-                
-                    <input type="hidden" name="_src_id" value="{{ $board->id }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div class="form-group">
-                        <textarea class="form-control" name="post_text"  value="" cols="50" rows="6" maxlength="140"></textarea>
-                    </div>
-                
+                <input type="hidden" name="_src_id" value="{{ $board->id }}">
+                @csrf
+                <div class="form-group">
+                    <textarea class="form-control" name="post_text"  value="" cols="50" rows="6" maxlength="140" style="font-size:130%; resize: none;"></textarea>
+                </div>
             </div>
             <div class="row" style="padding:15px;">
                 <div class="imagePreviewPre">
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                     <!--★★★画像ファイル以外はエラー表示にしたい-->
                     <label class="input-group-btn">
-                        <span class="btn btn-primary">
+                        <span class="btn btn-light">
                                 画像<input type="file" name="image" style="display:none" class="uploadFile">
                         </span>
                     </label>
@@ -115,7 +120,4 @@
         </div>
     </div>
 </div>
-
-
-
 @endsection

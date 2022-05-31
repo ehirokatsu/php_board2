@@ -26,7 +26,7 @@ class BoardController extends Controller
         $boards = Board::with('post')->get();
         $boards = Board::with('reply')->get();
         $boards = Board::with('boardimage')->get();
-
+        $boards = Board::simplePaginate(10);
 
         $param = ['boards' => $boards, 'sort' => $sort, 'user' => $user];
 

@@ -11,7 +11,11 @@
             <div class="row">
                 @if(Storage::disk('local')->exists('public/profile/' . $board->user->id . '.jpg'))
                     <figure>
-                        <img src="/storage/profile/{{$board->user-> id}}.jpg" width="50px" height="50px">
+                        <img src="/storage/profile/{{$board->user-> id}}.jpg" width="100px" height="100px">
+                    </figure>
+                 @else
+                    <figure>
+                        <img src="/storage/profile/0.jpg" width="100px" height="100px">
                     </figure>
                 @endif
             </div>
@@ -30,12 +34,7 @@
             </div>
 
 		    <div class="row">
-                
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div class="form-group">
-                        <textarea class="form-control" name="post_text"  value="{{ $board->post_text }}" cols="50" rows="6" maxlength="140">{{ $board->post_text }}</textarea>
-                    </div>
-                
+                <p>{{ $board->post_text }}</p>
             </div>
             <div class="row" style="padding:15px;">
                 <div class="imagePreviewPre">
@@ -52,14 +51,13 @@
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                     <a href="/board/{{ $board->id }}/reply" class="btn btn-light" >
-                        <span class="small text-secondary">返信</span>
+                        <span class="small text-primary">返信</span>
                     </a>
                 </div>
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                 @if(!empty($board->reply->src_post_id))
                     <a href="/board/{{ $board->reply->src_post_id }}" class="btn btn-light">
                         <span class="small text-secondary">
-                        <!--{{ $board->reply->src_post_id }}--> 
                         返信先
                         </span>
                     </a>

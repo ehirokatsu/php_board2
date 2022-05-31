@@ -1,50 +1,5 @@
 @extends('board/layout')
 @section('content')
-<!--
-@if (Auth::check())
-<header>
-  <h1>BBS</h1>
-</header>
-<p>USER: {{$user->name . ' (' . $user->email . ')'}}</p>
-  @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
-    <td><figure>
-              <img src="/storage/profile/{{$user-> id}}.jpg" width="100px" height="100px">
-    </figure></td>
-  @endif
-@else
-<p>※ログインしていません。（<a href="/login">ログイン</a>｜
-   <a href="/register">登録</a>）</p>
-@endif
-
-<form action="/logout" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <button type="submit" class="btn btn-light">ログアウト</button>
-</form>
-
-
-<div class="container">
-	<div class="row">
-    
-    <div class="col-lg-4 border justify-content-center">
-    <div class="text-center">1</div>
-    </div>
-    <div class="col-lg-4 border d-flex align-items-center justify-content-center" style="height:100px">
-      <form  style="margin: auto;">
-      <input class="form-control" type="text" name="address">
-      </form>
-    </div>
-    <div class="col-lg-4 border">
-      3
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    bb
-  </div>
-  <div class="row">
-    cc
-  </div>
-</div>
--->
 <nav class="navbar navbar-expand-sm navbar-light bg-light mt-3 mb-3 sticky-top">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -64,25 +19,32 @@
                     <a class="nav-link" href="#">設定</a>
                 </li>
                 <li class="nav-item">
-                  <!--　アイコンマウスオーバーで名前、メールアドレスを表示する
-                  <p>USER: {{$user->name . ' (' . $user->email . ')'}}</p>
--->
+                  <div class="icon">
                     @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
                       <figure>
                                 <img src="/storage/profile/{{$user-> id}}.jpg" width="50px" height="50px">
                       </figure>
+                    @else
+                      <figure>
+                        <img src="/storage/profile/0.jpg" width="50px" height="50px">
+                      </figure>
                     @endif
+                    <div class="user-info">
+                      <span>ユーザ名：{{$user->name}}</span>
+                      <br>
+                      <span>メールアドレス：{{$user->email}}</span>
+                    </div>
+                  </div>
                 </li>
                 <li class="nav-item">
                   <form action="/logout" method="post" style="margin: auto;">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    @csrf
                     <button type="submit" class="btn btn-light">ログアウト</button>
                    </form>
                 </li>
             </ul>
         </div>
     </nav>  
-
 @foreach($boards as $board)
 <div class="container">
 	<div class="row">
@@ -94,7 +56,11 @@
             <figure>
               <img src="/storage/profile/{{$board->user-> id}}.jpg" width="50px" height="50px">
               </figure>
-           @endif
+          @else
+            <figure>
+              <img src="/storage/profile/0.jpg" width="50px" height="50px">
+            </figure>
+          @endif
       </div>
     </div>
 		<div class="col-8 col-lg-5 border border-start-0" style="padding:10px">
@@ -135,7 +101,6 @@
           @if(!empty($board->reply->src_post_id))
             <a href="/board/{{ $board->reply->src_post_id }}" class="btn btn-light">
             <span class="small text-secondary">
-            <!--{{ $board->reply->src_post_id }}--> 
             返信先
             </span>
           </a>
@@ -152,10 +117,10 @@
           @if($board->user->id === Auth::id())
             <!--form内は下側に若干スペースが出来る。中央揃えにするにはmargin:autoが必要-->
             <form action="/board/{{ $board->id }}" method="post" style="margin: auto;">
-              <input type="hidden" name="_method" value="DELETE">
-              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              @method('DELETE')
+              @csrf
               <button type="submit" class="btn btn-danger">
-                <span class="small text-light">削除</span>
+                <span class="small text-light btn-delete">削除</span>
               </button>
             </form>
           @endif
@@ -168,4 +133,7 @@
 </div>
 <br>
 @endforeach
+<div class="text-center">
+  {{$boards->links()}}
+</div>
 @endsection
