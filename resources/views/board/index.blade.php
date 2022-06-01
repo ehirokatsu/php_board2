@@ -16,7 +16,7 @@
                 </li>
                 <div></div>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">設定</a>
+                    <a class="nav-link" href="/board/profile">設定</a>
                 </li>
                 <li class="nav-item">
                   <div class="icon">

@@ -68,7 +68,7 @@ class BoardController extends Controller
         return view('board/create', $param);
     }
     
-    public function replyshow($id)
+    public function replyShow($id)
     {
         //先にwithで結合してからfindしないとエラーになる
         $board = Board::with('post')->get();
@@ -79,7 +79,7 @@ class BoardController extends Controller
         $user = Auth::user();
         $param = ['board' => $board, 'user' => $user];
 
-        return view('board/replyshow', $param);
+        return view('board/replyShow', $param);
     }
 
     public function store(BoardRequest $request)
@@ -166,6 +166,22 @@ class BoardController extends Controller
 
         // 取得した値をビュー「board/edit」に渡す
         return view('board/show', compact('board'));
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('board/profile', compact('user'));
+    }
+    public function profileUpdate(Request $request)
+    {
+
+        
+        exit('OK');
+    }
+    public function profileDelete()
+    {
+        exit('NG');
     }
 
     public function insertBoard($post_text)
