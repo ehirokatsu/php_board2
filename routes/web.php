@@ -1,9 +1,9 @@
 <?php
 
-Route::get('board/profile', 'App\Http\Controllers\BoardController@profile')->middleware('auth');
-Route::PUT('board/profile', 'App\Http\Controllers\BoardController@profileUpdate')->middleware('auth');
+Route::get('board/profile', 'App\Http\Controllers\UserController@profile')->middleware('auth');
+Route::PUT('board/profile', 'App\Http\Controllers\UserController@profileUpdate')->middleware('auth');
 
-Route::DELETE('board/profile', 'App\Http\Controllers\BoardController@profileDelete')->middleware('auth');
+Route::DELETE('board/{id}/profile', 'App\Http\Controllers\UserController@profileDelete')->middleware('auth');
 
 /*
 Route::get('board', 'App\Http\Controllers\BoardController@index');

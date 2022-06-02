@@ -27,13 +27,14 @@
     </button>
 </form>
 
-<form method="POST" action="/board/profile" enctype="multipart/form-data">
+<form method="POST" action="/board/{{ $user->id }}/profile" enctype="multipart/form-data">
     @csrf
     @method('DELETE')
-    <button type="submit" class="btn btn-primary">
-        {{ __('Register') }}
+    <button type="submit" class="btn btn-danger">
+        {{ __('アカウント削除') }}
     </button>
 </form>
+
 <!--
 
 更新ボタン

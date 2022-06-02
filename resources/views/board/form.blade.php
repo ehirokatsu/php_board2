@@ -34,7 +34,7 @@
             <form action="/board" method="post" enctype="multipart/form-data">
             @elseif($target === 'update')
             <form action="/board/{{ $board->id }}" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="_method" value="PUT">
+                @method('PUT')
             @endif
 
 		    <div class="row">
