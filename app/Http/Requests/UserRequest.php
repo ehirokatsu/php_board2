@@ -24,7 +24,15 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'email' => 'email',
+            'password' => 'confirmed',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'email' => 'メールアドレスの形式が間違っています',
+            'password.confirmed' => 'パスワード確認項目と一致しません',
         ];
     }
 }

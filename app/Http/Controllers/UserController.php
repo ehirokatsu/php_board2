@@ -20,7 +20,6 @@ class UserController extends Controller
         
         $user = Auth::user();
         
-        echo('OK');
         if (!empty($request->name)) {
             $user->name = $request->name;
         }

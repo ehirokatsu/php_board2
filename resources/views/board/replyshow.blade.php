@@ -97,7 +97,7 @@
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                     <!--★★★画像ファイル以外はエラー表示にしたい-->
                     <label class="input-group-btn">
-                        <span class="btn btn-light">
+                        <span class="btn btn-info">
                                 画像<input type="file" name="image" style="display:none" class="uploadFile">
                         </span>
                     </label>

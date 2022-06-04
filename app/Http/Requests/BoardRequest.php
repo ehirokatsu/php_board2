@@ -33,16 +33,13 @@ class BoardRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'email',
-
-
+            'post_text' => 'max:140',
         ];
     }
     public function messages()
     {
         return [
-            'email' => '投稿は必ず入力して下さい。',
-            'post_text.max' => '投稿は140字以内です',
+            'post_text.max' => '投稿内容は140字以内です',
         ];
     }
 }
