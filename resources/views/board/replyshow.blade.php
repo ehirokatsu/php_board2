@@ -81,7 +81,7 @@
                 <div class="col-lg-9">
                 </div>
             </div>
-            <form action="/board/reply" method="post" enctype="multipart/form-data">
+            <form action="/board/replyStore" method="post" enctype="multipart/form-data">
 		    <div class="row">
                 <input type="hidden" name="_src_id" value="{{ $board->id }}">
                 @csrf

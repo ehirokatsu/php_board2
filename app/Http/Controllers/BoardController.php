@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Post;
 use App\Models\Reply;
-use App\Models\Boardimage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\BoardRequest;
@@ -14,49 +13,48 @@ use Illuminate\Support\Facades\Auth;
 
 class BoardController extends Controller
 {
+
+    /************************************************
+     * 一覧画面の表示
+     * @param 
+     * @return view Board/index
+     ************************************************/
     public function index(Request $request)
     {
 
         $user = Auth::user();
         $sort = $request->sort;
-        //$items = Person::orderBy($sort, 'asc')->simplePaginate(5);
-        
 
         $boards = Board::with('user')->get();
         $boards = Board::with('post')->get();
         $boards = Board::with('reply')->get();
-        $boards = Board::with('boardimage')->get();
-        $boards = Board::simplePaginate(10);
+        $boards = Board::orderBy('id', 'desc')->simplePaginate(10);
 
         $param = ['boards' => $boards, 'sort' => $sort, 'user' => $user];
 
         return view('Board.index',$param);
     }
 
-    public function edit($id)
+    /************************************************
+     * 各投稿の詳細画面
+     * @param  $id 投稿ID
+     * @return view Board/show
+     ************************************************/
+    public function show($id)
     {
-        $user = Auth::user();
+
         // DBよりURIパラメータと同じIDを持つboardの情報を取得
         $board = board::findOrFail($id);
-  
-        $param = ['board' => $board, 'user' => $user];
+
         // 取得した値をビュー「board/edit」に渡す
-        return view('board/edit', $param);
+        return view('board/show', compact('board'));
     }
-  
-    public function destroy($id)
-    {
-        //投稿を削除する
-        $board = board::findOrFail($id);
-        $board->delete();
 
-        //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
-            Storage::disk('local')->delete('public/images/' . $id . '.jpg');
-        }
-
-        return redirect("/board");
-    }
+    /************************************************
+     * 投稿の登録画面
+     * @param  無し
+     * @return view Board/create
+     ************************************************/
     public function create()
     {
 
@@ -67,21 +65,13 @@ class BoardController extends Controller
         $param = ['board' => $board, 'user' => $user];
         return view('board/create', $param);
     }
-    
-    public function replyShow($id)
-    {
-        //先にwithで結合してからfindしないとエラーになる
-        $board = Board::with('post')->get();
-        $board = Board::with('user')->get();
-        $board = Board::with('boardimage')->get();
-        $board = Board::findOrFail($id);
 
-        $user = Auth::user();
-        $param = ['board' => $board, 'user' => $user];
-
-        return view('board/replyShow', $param);
-    }
-
+    /************************************************
+     * 投稿の登録処理
+     * @param  $request->post_text 投稿テキスト
+     * @param  $request->image 投稿画像
+     * @return view Board
+     ************************************************/
     public function store(BoardRequest $request)
     {
 
@@ -96,6 +86,100 @@ class BoardController extends Controller
         return redirect("/board");
     }
 
+    /************************************************
+     * 投稿の編集画面
+     * @param  $id 投稿ID
+     * @return view Board/edit
+     ************************************************/
+    public function edit($id)
+    {
+        $user = Auth::user();
+        // DBよりURIパラメータと同じIDを持つboardの情報を取得
+        $board = board::findOrFail($id);
+  
+        $param = ['board' => $board, 'user' => $user];
+        // 取得した値をビュー「board/edit」に渡す
+        return view('board/edit', $param);
+    }
+
+    /************************************************
+     * 投稿の更新処理
+     * @param  $request->post_text 投稿テキスト
+     * @param  $request->image 投稿画像
+     * @param  $id 投稿ID
+     * @return view Board
+     ************************************************/
+    public function update(BoardRequest $request, $id)
+    {
+        //現在日時を取得する
+        date_default_timezone_set('Asia/Tokyo');
+        $today = date("Y-m-d H:i:s");
+
+        $board = board::findOrFail($id);
+        $board->post_text = $request->post_text;
+        $board->send_date = $today;
+        $board->save();
+
+        //画像がアップロードされている場合
+        if (!empty($request->image)) {
+            //すでに画像投稿されている場合
+            if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
+                //前の画像を削除する
+                Storage::disk('local')->delete('public/images/' . $id . '.jpg');
+
+            }
+
+            //画像保存する
+            $request->image->storeAs('public/images', $id . '.jpg');
+
+        }
+        return redirect("/board");
+    }
+
+    /************************************************
+     * 投稿の削除処理
+     * @param  $id 投稿ID
+     * @return view Board
+     ************************************************/
+    public function destroy($id)
+    {
+        //投稿を削除する
+        $board = board::findOrFail($id);
+        $board->delete();
+
+        //投稿に画像があれば削除する
+        if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
+            Storage::disk('local')->delete('public/images/' . $id . '.jpg');
+        }
+
+        return redirect("/board");
+    }
+
+    /************************************************
+     * 返信投稿の詳細画面
+     * @param  $id 投稿ID
+     * @return view Board/replyShow
+     ************************************************/
+    public function replyShow($id)
+    {
+        //先にwithで結合してからfindしないとエラーになる
+        $board = Board::with('post')->get();
+        $board = Board::with('user')->get();
+        $board = Board::findOrFail($id);
+
+        $user = Auth::user();
+        $param = ['board' => $board, 'user' => $user];
+
+        return view('board/replyShow', $param);
+    }
+
+    /************************************************
+     * 返信投稿の登録処理
+     * @param  $request->_src_id 返信元ID
+     * @param  $request->post_text 投稿テキスト
+     * @param  $request->image 投稿画像
+     * @return view Board
+     ************************************************/
     public function replyStore(BoardRequest $request)
     {
        
@@ -123,51 +207,11 @@ class BoardController extends Controller
         return redirect("/board");
     }
 
-    public function update(BoardRequest $request, $id)
-    {
-        //現在日時を取得する
-        date_default_timezone_set('Asia/Tokyo');
-        $today = date("Y-m-d H:i:s");
-
-        $board = board::findOrFail($id);
-        $board->post_text = $request->post_text;
-        $board->send_date = $today;
-        $board->save();
-
-        //画像がアップロードされている場合
-        if (!empty($request->image)) {
-            //すでに画像投稿されている場合
-            if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
-                //前の画像を削除する
-                Storage::disk('local')->delete('public/images/' . $id . '.jpg');
-
-            } else {
-
-                //画像投稿されていない場合
-                $boardimage = new Boardimage;
-                $boardimage->post_id = $id;
-                $boardimage->image_name = $id . '.jpg';
-                $boardimage->save();
-            }
-
-            //画像保存する
-            $request->image->storeAs('public/images', $id . '.jpg');
-
-        }
-        return redirect("/board");
-    }
-
-
-    public function show($id)
-    {
-
-        // DBよりURIパラメータと同じIDを持つboardの情報を取得
-        $board = board::findOrFail($id);
-
-        // 取得した値をビュー「board/edit」に渡す
-        return view('board/show', compact('board'));
-    }
-
+    /************************************************
+     * 投稿をBoardテーブルにINSERTする
+     * @param  $post_text 投稿テキスト
+     * @return $board->id BoardテーブルにINSERTした時のID
+     ************************************************/
     public function insertBoard($post_text)
     {
         //ログイン中のユーザ名を取得する
@@ -193,14 +237,15 @@ class BoardController extends Controller
         return $board->id;
 
     }
-    
+
+    /************************************************
+     * 投稿画像を保存する
+     * @param  $lastInsertBoardId 投稿ID
+     * @param  $request->image 投稿画像
+     * @return view Board/create
+     ************************************************/
     public function imageSave($lastInsertBoardId, $request)
     {
         $request->image->storeAs('public/images', $lastInsertBoardId . '.jpg');
-        $boardimage = new Boardimage;
-        $boardimage->post_id = $lastInsertBoardId;
-        $boardimage->image_name = $lastInsertBoardId . '.jpg';
-        $boardimage->save();
     }
-
 }

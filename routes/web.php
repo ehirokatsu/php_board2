@@ -29,7 +29,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('board/{id}/reply', 'App\Http\Controllers\BoardController@replyShow')->middleware('auth');
+Route::get('board/{id}/replyShow', 'App\Http\Controllers\BoardController@replyShow')->middleware('auth');
 
-Route::post('board/reply', 'App\Http\Controllers\BoardController@replyStore')->middleware('auth');
+Route::post('board/replyStore', 'App\Http\Controllers\BoardController@replyStore')->middleware('auth');
 

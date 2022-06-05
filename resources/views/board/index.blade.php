@@ -1,6 +1,6 @@
 @extends('board/layout')
 @section('content')
-<nav class="navbar navbar-expand-sm navbar-light bg-light mt-3 mb-3 sticky-top">
+<nav class="navbar navbar-expand-sm navbar-light bg-light mt-3 mb-3 sticky-top offset-mt-3">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -93,7 +93,7 @@
       <div class="row">
         <!--col内をセンタリングするにはd-flex以降全て必要-->
 				<div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-          <a href="/board/{{ $board->id }}/reply" class="btn btn-light" >
+          <a href="/board/{{ $board->id }}/replyShow" class="btn btn-light" >
             <span class="small text-secondary">返信</span>
           </a>
 				</div>

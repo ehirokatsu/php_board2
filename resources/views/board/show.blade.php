@@ -40,9 +40,9 @@
                 <div class="imagePreviewPre">
                 </div>
                 <div class="imagePreviewEdit">
-                    @if(!empty($board->boardimage->image_name))
+                    @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
                         <figure>
-                        <img src="/storage/images/{{$board->boardimage->image_name}}">
+                        <img src="/storage/images/{{$board->id}}.jpg">
                         </figure>
                     @endif
                 </div>
@@ -51,7 +51,7 @@
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                     <a href="/board/{{ $board->id }}/reply" class="btn btn-light" >
-                        <span class="small text-primary">返信</span>
+                        <span class="small text-secondary">返信</span>
                     </a>
                 </div>
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">

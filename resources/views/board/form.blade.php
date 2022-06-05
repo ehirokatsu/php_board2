@@ -53,7 +53,7 @@
                 <div class="imagePreviewEdit">
                     @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
                         <figure>
-                        <img src="/storage/images/{{$board->boardimage->image_name}}">
+                        <img src="/storage/images/{{$board->id}}.jpg">
                         </figure>
                     @endif
                 </div>
