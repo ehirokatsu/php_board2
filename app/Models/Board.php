@@ -16,12 +16,6 @@ class Board extends Model
         return $this->belongsTo('App\Models\user');
     }
 
-
-    public function post()
-    {
-        return $this->hasOne('App\Models\post','post_id', 'id');
-    }
-
     public function reply()
     {
         return $this->hasOne('App\Models\reply','post_id', 'id');

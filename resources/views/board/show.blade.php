@@ -1,8 +1,7 @@
 @extends('board/layout')
+@extends('board/nav')
 @section('content')
-
 <div class="container">
-
     <div class="row">
         @include('board/message')
         <div class="col-1 col-lg-1">
@@ -34,17 +33,20 @@
             </div>
 
 		    <div class="row">
-                <p>{{ $board->post_text }}</p>
+                <p>
+                    {{ $board->post_text }}
+                </p>
+                    @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
+                        <figure>
+                            <img src="/storage/images/{{$board->id}}.jpg">
+                        </figure>
+                    @endif
             </div>
             <div class="row" style="padding:15px;">
                 <div class="imagePreviewPre">
                 </div>
                 <div class="imagePreviewEdit">
-                    @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
-                        <figure>
-                        <img src="/storage/images/{{$board->id}}.jpg">
-                        </figure>
-                    @endif
+                    
                 </div>
             </div>
 

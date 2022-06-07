@@ -1,4 +1,5 @@
 @extends('board/layout')
+@extends('board/nav')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -80,13 +81,6 @@
                                     <label class="input-group-btn">
                                         <span class="btn btn-info">
                                             画像<input type="file" name="image" style="display:none" class="uploadFile is-invalid">
-                                            <!--
-                                            @error('image')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
--->
                                         </span>
                                     </label>
                                 </div>

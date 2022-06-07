@@ -1,5 +1,5 @@
 @extends('board/layout')
-
+@extends('board/nav')
 @section('content')
 <div class="container">
     <div class="row">
@@ -41,12 +41,12 @@
                 <p>
                     {{ $board->post_text }}
                 </p>
+                    @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
+                    <figure>
+                        <img src="/storage/images/{{$board->id}}.jpg" height="300px">
+                    </figure>
+                    @endif
             </a>
-            @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
-                <figure>
-                <img src="/storage/images/{{$board->id}}.jpg" height="300px">
-            </figure>
-            @endif
 		</div>
         <div class="col-1 col-lg-1">
         </div>
@@ -83,11 +83,12 @@
                 </div>
             </div>
             <form action="/board/replyStore" method="post" enctype="multipart/form-data">
-		    <div class="row">
                 <input type="hidden" name="_src_id" value="{{ $board->id }}">
+		    <div class="row">
                 @csrf
                 <div class="form-group">
-                    <textarea class="form-control" name="post_text"  value="" cols="50" rows="6" maxlength="140" style="font-size:130%; resize: none;"></textarea>
+                    <textarea class="form-control"
+                    name="post_text"  value="" cols="50" rows="6" maxlength="140" style="font-size:130%; resize: none;"></textarea>
                 </div>
             </div>
             <div class="row" style="padding:15px;">
@@ -96,7 +97,6 @@
             </div>
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-                    <!--★★★画像ファイル以外はエラー表示にしたい-->
                     <label class="input-group-btn">
                         <span class="btn btn-info">
                                 画像<input type="file" name="image" style="display:none" class="uploadFile">

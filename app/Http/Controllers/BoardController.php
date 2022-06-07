@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Board;
-use App\Models\Post;
 use App\Models\Reply;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -25,12 +24,7 @@ class BoardController extends Controller
         //ログインユーザ情報を取得する
         $user = Auth::user();
 
-        //関連するテーブルとJOINする
-        $boards = Board::with('user')->get();
-        $boards = Board::with('post')->get();
-        $boards = Board::with('reply')->get();
-
-        //投稿された順番に変更し、1ページ５投稿まで表示する
+        //投稿された順番に変更し、1ページ10投稿まで表示する
         $boards = Board::orderBy('id', 'desc')->simplePaginate(10);
 
         $param = ['boards' => $boards, 'user' => $user];
@@ -49,7 +43,11 @@ class BoardController extends Controller
         //選択した投稿のIDから行を取得する
         $board = board::findOrFail($id);
 
-        return view('board/show', compact('board'));
+        //Navバー表示のためログインユーザ情報を渡す
+        $user = Auth::user();
+
+        $param = ['board' => $board, 'user' => $user];
+        return view('board/show', $param);
     }
 
     /************************************************
@@ -78,7 +76,7 @@ class BoardController extends Controller
     public function store(BoardRequest $request)
     {
 
-        //boardとpostテーブルに挿入する
+        //boardテーブルに挿入する
         $lastInsertBoardId = $this->insertBoard($request->post_text);
 
         //画像も投稿されていれば保存する
@@ -180,10 +178,9 @@ class BoardController extends Controller
     public function replyShow($id)
     {
         //先にwithで結合してからfindしないとエラーになる
-        $board = Board::with('post')->get();
-        $board = Board::with('user')->get();
         $board = Board::findOrFail($id);
 
+        //Navバー表示のためログインユーザ情報を渡す
         $user = Auth::user();
         $param = ['board' => $board, 'user' => $user];
 
@@ -199,14 +196,7 @@ class BoardController extends Controller
      ************************************************/
     public function replyStore(BoardRequest $request)
     {
-       
-        //投稿元のreply_flagをtrueにする
-        //post.phpにて主キー名を変更する必要あり
-        $post = Post::findOrFail($request->_src_id);
-        $post->reply_flag = true;
-        $post->save();
-
-        //boardとpostテーブルに挿入する
+        //boardテーブルに挿入する
         $lastInsertBoardId = $this->insertBoard($request->post_text);
 
         //返信なのでreplyテーブルにinsertする
@@ -249,12 +239,6 @@ class BoardController extends Controller
         $board->user_id = $user->id;
         $board->save();
 
-        //postテーブルにinsertする
-        $post = new Post;
-        $post->post_id = $board->id;
-        $post->reply_flag = false;
-        $post->save();
-        
         return $board->id;
 
     }
