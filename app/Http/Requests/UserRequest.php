@@ -23,16 +23,36 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'email' => 'email',
-            'password' => 'confirmed',
+        var_dump($this->image);
+        $rules = [
+
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users,email',
+            'password' => 'nullable|string|min:8|confirmed',
+            'image' => 'nullable|image',
         ];
+
+        //自分のメールアドレスは検証から除外する
+        if (!empty($this->userId)) {
+            $rules['email'] = $rules['email'].','.$this->userId.'id';
+        }
+
+        return $rules;
     }
+
     public function messages()
     {
         return [
-            'email' => 'メールアドレスの形式が間違っています',
+            'name.string' => '名前は文字列で入力してください',
+            'name.max' => '名前の最大値は255文字です',
+            'email.string' => 'メールアドレスは文字列で入力してください',
+            'email.email' => 'メールアドレスの形式が間違っています',
+            'email.max' => 'メールアドレスの最大値は255文字です',
+            'email.unique' => 'メールアドレスが既に登録されています',
+            'password.string' => 'パスワードは文字列で入力してください',
+            'password.min' => 'パスワードは8文字以上で入力してください',
             'password.confirmed' => 'パスワード確認項目と一致しません',
+            'image.image' => '画像ファイルを選択してください',
         ];
     }
 }

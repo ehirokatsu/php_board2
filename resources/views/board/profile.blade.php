@@ -10,6 +10,8 @@
                     <form method="POST" action="/board/profile" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <!--自分のメールアドレスを検証から除外する用-->
+                        <input type="hidden" name="userId" value="{{$user->id}}">
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
@@ -20,6 +22,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+
                             </div>
                         </div>
 
@@ -65,7 +68,7 @@
                                 <div class="imagePreviewPre">
                                 </div>
                                 <div class="imagePreviewEdit">
-                                @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
+                                    @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
                                         <figure>
                                         <img src="/storage/profile/{{$user-> id}}.jpg" width="400px">
                                         </figure>
@@ -73,13 +76,25 @@
                                 </div>
                             </div>
                             <div class="">
-                            <div class="col-3 col-lg-3  offset-lg-3 d-flex align-items-center justify-content-center">
-                                <label class="input-group-btn">
-                                    <span class="btn btn-info">
-                                            画像<input type="file" name="image" style="display:none" class="uploadFile">
-                                    </span>
-                                </label>
-                            </div>
+                                <div class="col-3 col-lg-3  offset-lg-3 d-flex align-items-center justify-content-center">
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-info">
+                                            画像<input type="file" name="image" style="display:none" class="uploadFile is-invalid">
+                                            <!--
+                                            @error('image')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+-->
+                                        </span>
+                                    </label>
+                                </div>
+                                 @error('image')
+                                    <div class="alert alert-danger col-3 col-lg-7  offset-lg-4 d-flex align-items-center justify-content-center">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-0">
@@ -88,7 +103,7 @@
                                     {{ __('更新') }}
                                 </button>
                             </div>
-                            </form>
+                    </form>
                             <div class="col-md-3">
                                 <form method="POST" action="/board/{{ $user->id }}/profile" enctype="multipart/form-data">
                                     @csrf

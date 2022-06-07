@@ -10,33 +10,56 @@ use App\Http\Requests\UserRequest;
 class UserController extends Controller
 {
 
+    /************************************************
+     * ログインユーザの一覧画面の表示
+     * @param 
+     * @return view Board/profile
+     ************************************************/
     public function profile()
     {
+        //ログインユーザ情報を取得する
         $user = Auth::user();
+
         return view('board/profile', compact('user'));
     }
+
+    /************************************************
+     * ログインユーザの更新処理
+     * @param  $request->name ユーザ名
+     * @param  $request->email メールアドレス
+     * @param  $request->password パスワード
+     * @param  $request->password_confirmation パスワード確認
+     * @param  $request->image ユーザ画像
+     * @param  $id 投稿ID
+     * @return view Board
+     ************************************************/
     public function profileUpdate(UserRequest $request)
     {
-        
+        //ログインユーザ情報を取得する
         $user = Auth::user();
         
+        //ユーザ名が入力されていれば更新する
         if (!empty($request->name)) {
             $user->name = $request->name;
         }
+
+        //メールアドレスが入力されていれば更新する
         if (!empty($request->email)) {
             $user->email = $request->email;
         }
+
+        //パスワードが入力されていれば更新する
         if (!empty($request->password)
          && !empty($request->_confirmation)
          ) {
-            if ($request->password === $request->_confirmation) {
+            if ($request->password === $request->password_confirmation) {
                  $user->password = Hash::make($request->password);
             }
             
         }
         $user->save();
 
-        //画像保存
+        //ユーザ画像が入力されていれば更新する
         if (!empty($request->image)) {
             $request->image->storeAs('public/profile', $user->id . '.jpg');
         }
@@ -44,7 +67,12 @@ class UserController extends Controller
         return view('board/profile', compact('user'));
     }
 
-    public function profileDelete($id)
+    /************************************************
+     * 投稿の削除処理
+     * @param  $id 投稿ID
+     * @return view Board
+     ************************************************/
+    public function profileDestroy($id)
     {
 
         //投稿を削除する

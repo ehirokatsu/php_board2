@@ -82,12 +82,7 @@ class RegisterController extends Controller
             $data['image']->storeAs('public/profile', $user->id . '.jpg');
             //$data['image']->storeAs('public/profile', '111.jpg');
         }
-/*
-        $userimage = new Userimage();
-        $userimage->user_id = $user->id;
-        $userimage->image_name = $user->id . '.jpg';
-        $userimage->save();
-*/
+
         return $user;
         /*
         return User::create([

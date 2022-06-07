@@ -61,14 +61,17 @@
 
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-                    <!--★★★画像ファイル以外はエラー表示にしたい-->
                     <label class="input-group-btn">
                         <span class="btn btn-info">
                                 画像<input type="file" name="image" style="display:none" class="uploadFile">
                         </span>
                     </label>
                 </div>
-                <div class="col-3 col-lg-3">
+                <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
+                    @if($target === 'update')
+                    <input type="checkbox" class="form-check-input" name="image_delete" id="check1"  value="" >
+                    <label class="form-check-label" for="check1">画像削除</label>
+                    @endif
                 </div>
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                     <button type="submit" class="btn btn-primary">投稿する</button>

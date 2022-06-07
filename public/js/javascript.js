@@ -22,6 +22,8 @@ $(document).on('change', ':file', function() {
 
         //編集画面で既存画像があれば非表示にする
         $('.imagePreviewEdit').css('display', 'none');
+    } else {
+        window.alert('画像ファイルではありません');
     }
 });
 

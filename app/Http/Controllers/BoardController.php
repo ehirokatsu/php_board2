@@ -22,15 +22,18 @@ class BoardController extends Controller
     public function index(Request $request)
     {
 
+        //ログインユーザ情報を取得する
         $user = Auth::user();
-        $sort = $request->sort;
 
+        //関連するテーブルとJOINする
         $boards = Board::with('user')->get();
         $boards = Board::with('post')->get();
         $boards = Board::with('reply')->get();
+
+        //投稿された順番に変更し、1ページ５投稿まで表示する
         $boards = Board::orderBy('id', 'desc')->simplePaginate(10);
 
-        $param = ['boards' => $boards, 'sort' => $sort, 'user' => $user];
+        $param = ['boards' => $boards, 'user' => $user];
 
         return view('Board.index',$param);
     }
@@ -43,10 +46,9 @@ class BoardController extends Controller
     public function show($id)
     {
 
-        // DBよりURIパラメータと同じIDを持つboardの情報を取得
+        //選択した投稿のIDから行を取得する
         $board = board::findOrFail($id);
 
-        // 取得した値をビュー「board/edit」に渡す
         return view('board/show', compact('board'));
     }
 
@@ -57,9 +59,10 @@ class BoardController extends Controller
      ************************************************/
     public function create()
     {
-
+        //ログインユーザ情報を取得する
         $user = Auth::user();
-        // 空の$boardを渡す
+
+        // 空の$boardを取得する
         $board = new board();
 
         $param = ['board' => $board, 'user' => $user];
@@ -78,7 +81,7 @@ class BoardController extends Controller
         //boardとpostテーブルに挿入する
         $lastInsertBoardId = $this->insertBoard($request->post_text);
 
-        //画像保存
+        //画像も投稿されていれば保存する
         if (!empty($request->image)) {
             $this->imageSave($lastInsertBoardId, $request);
         }
@@ -93,12 +96,14 @@ class BoardController extends Controller
      ************************************************/
     public function edit($id)
     {
+        //ログインユーザ情報を取得する
         $user = Auth::user();
-        // DBよりURIパラメータと同じIDを持つboardの情報を取得
+
+        //選択した投稿のIDから行を取得する
         $board = board::findOrFail($id);
   
         $param = ['board' => $board, 'user' => $user];
-        // 取得した値をビュー「board/edit」に渡す
+        
         return view('board/edit', $param);
     }
 
@@ -115,7 +120,12 @@ class BoardController extends Controller
         date_default_timezone_set('Asia/Tokyo');
         $today = date("Y-m-d H:i:s");
 
+        //選択した投稿のIDから行を取得する
         $board = board::findOrFail($id);
+
+        if(empty($request->post_text)){
+            $request->post_text = "";
+        }
         $board->post_text = $request->post_text;
         $board->send_date = $today;
         $board->save();
@@ -126,13 +136,20 @@ class BoardController extends Controller
             if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
                 //前の画像を削除する
                 Storage::disk('local')->delete('public/images/' . $id . '.jpg');
-
             }
 
             //画像保存する
             $request->image->storeAs('public/images', $id . '.jpg');
-
         }
+
+        //画像削除チェックボックスがONなら画像を削除する
+        if ($request->image_delete
+         && Storage::disk('local')->exists('public/images/' . $id . '.jpg')
+         ) {
+            //投稿していた画像を削除する
+            Storage::disk('local')->delete('public/images/' . $id . '.jpg');
+        }
+
         return redirect("/board");
     }
 
@@ -199,7 +216,7 @@ class BoardController extends Controller
         $reply->save();
         
         
-        //画像保存
+        //投稿に画像があれば削除する
         if (!empty($request->image)) {
             $this->imageSave($lastInsertBoardId, $request);
         }
@@ -223,6 +240,10 @@ class BoardController extends Controller
 
         //投稿内容をinsertする
         $board = new Board;
+       
+        if(empty($post_text)){
+            $post_text = "";
+        }
         $board->post_text = $post_text;
         $board->send_date = $today;
         $board->user_id = $user->id;

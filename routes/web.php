@@ -3,7 +3,7 @@
 Route::get('board/profile', 'App\Http\Controllers\UserController@profile')->middleware('auth');
 Route::PUT('board/profile', 'App\Http\Controllers\UserController@profileUpdate')->middleware('auth');
 
-Route::DELETE('board/{id}/profile', 'App\Http\Controllers\UserController@profileDelete')->middleware('auth');
+Route::DELETE('board/{id}/profile', 'App\Http\Controllers\UserController@profileDestroy')->middleware('auth');
 
 /*
 Route::get('board', 'App\Http\Controllers\BoardController@index');

@@ -12,8 +12,4 @@ class Post extends Model
     //デフォルトだと主キーはidになるから変更
     protected $primaryKey = 'post_id';
 
-    public function getData()
-    {
-        return $this->post_id . ': ' . $this->reply_flag;
-    }
 }

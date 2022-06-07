@@ -13,15 +13,6 @@ class BoardRequest extends FormRequest
      */
     public function authorize()
     {
-        /*
-        if ($this->path() ===  'board' || $this->path() ===  'board/reply')
-        {
-            return true;
-
-        } else {
-            return false;
-        }
-        */
         return true;
     }
 
@@ -32,14 +23,22 @@ class BoardRequest extends FormRequest
      */
     public function rules()
     {
+        //テキスト文と画像いずれか一方が投稿されていればOKにする
+        //required_withoutをimageにも付与すると、同じエラー文が表示されるので
+        //post_textのみに付与する
         return [
-            'post_text' => 'max:140',
+            'post_text' => 'nullable|required_without:image|max:140|string',
+            'image' => 'nullable|image',
         ];
     }
     public function messages()
     {
         return [
-            'post_text.max' => '投稿内容は140字以内です',
+
+            'post_text.required_without' => 'テキストか画像いずれかを入力してください',
+            'post_text.string' => '投稿は文字列で入力してください',
+            'post_text.max' => '投稿の最大値は140文字です',
+            'image.image' => '画像ファイルを選択してください',
         ];
     }
 }

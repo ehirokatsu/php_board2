@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
+    @include('board/message')
         <div class="col-1 col-lg-1">
         </div>
         <div class="col-2 col-lg-2 border border-end-0">
