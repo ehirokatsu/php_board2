@@ -16,7 +16,7 @@ class BoardController extends Controller
     /************************************************
      * 一覧画面の表示
      * @param 
-     * @return view Board/index
+     * @return view /index
      ************************************************/
     public function index(Request $request)
     {
@@ -29,13 +29,13 @@ class BoardController extends Controller
 
         $param = ['boards' => $boards, 'user' => $user];
 
-        return view('Board.index',$param);
+        return view('/index',$param);
     }
 
     /************************************************
      * 各投稿の詳細画面
      * @param  $id 投稿ID
-     * @return view Board/show
+     * @return view /show
      ************************************************/
     public function show($id)
     {
@@ -47,13 +47,13 @@ class BoardController extends Controller
         $user = Auth::user();
 
         $param = ['board' => $board, 'user' => $user];
-        return view('board/show', $param);
+        return view('/show', $param);
     }
 
     /************************************************
      * 投稿の登録画面
      * @param  無し
-     * @return view Board/create
+     * @return view /create
      ************************************************/
     public function create()
     {
@@ -64,14 +64,14 @@ class BoardController extends Controller
         $board = new board();
 
         $param = ['board' => $board, 'user' => $user];
-        return view('board/create', $param);
+        return view('/create', $param);
     }
 
     /************************************************
      * 投稿の登録処理
      * @param  $request->post_text 投稿テキスト
      * @param  $request->image 投稿画像
-     * @return view Board
+     * @return view /
      ************************************************/
     public function store(BoardRequest $request)
     {
@@ -84,13 +84,13 @@ class BoardController extends Controller
             $this->imageSave($lastInsertBoardId, $request);
         }
 
-        return redirect("/board");
+        return redirect("/");
     }
 
     /************************************************
      * 投稿の編集画面
      * @param  $id 投稿ID
-     * @return view Board/edit
+     * @return view /edit
      ************************************************/
     public function edit($id)
     {
@@ -102,7 +102,7 @@ class BoardController extends Controller
   
         $param = ['board' => $board, 'user' => $user];
         
-        return view('board/edit', $param);
+        return view('/edit', $param);
     }
 
     /************************************************
@@ -110,7 +110,7 @@ class BoardController extends Controller
      * @param  $request->post_text 投稿テキスト
      * @param  $request->image 投稿画像
      * @param  $id 投稿ID
-     * @return view Board
+     * @return view /
      ************************************************/
     public function update(BoardRequest $request, $id)
     {
@@ -141,20 +141,22 @@ class BoardController extends Controller
         }
 
         //画像削除チェックボックスがONなら画像を削除する
+        //$request->image_deleteにはvalue値が格納される
         if ($request->image_delete
          && Storage::disk('local')->exists('public/images/' . $id . '.jpg')
          ) {
+             
             //投稿していた画像を削除する
             Storage::disk('local')->delete('public/images/' . $id . '.jpg');
         }
 
-        return redirect("/board");
+        return redirect("/");
     }
 
     /************************************************
      * 投稿の削除処理
      * @param  $id 投稿ID
-     * @return view Board
+     * @return view /
      ************************************************/
     public function destroy($id)
     {
@@ -167,13 +169,13 @@ class BoardController extends Controller
             Storage::disk('local')->delete('public/images/' . $id . '.jpg');
         }
 
-        return redirect("/board");
+        return redirect("/");
     }
 
     /************************************************
      * 返信投稿の詳細画面
      * @param  $id 投稿ID
-     * @return view Board/replyShow
+     * @return view /replyShow
      ************************************************/
     public function replyShow($id)
     {
@@ -184,7 +186,7 @@ class BoardController extends Controller
         $user = Auth::user();
         $param = ['board' => $board, 'user' => $user];
 
-        return view('board/replyShow', $param);
+        return view('/replyShow', $param);
     }
 
     /************************************************
@@ -192,7 +194,7 @@ class BoardController extends Controller
      * @param  $request->_src_id 返信元ID
      * @param  $request->post_text 投稿テキスト
      * @param  $request->image 投稿画像
-     * @return view Board
+     * @return view /
      ************************************************/
     public function replyStore(BoardRequest $request)
     {
@@ -211,7 +213,7 @@ class BoardController extends Controller
             $this->imageSave($lastInsertBoardId, $request);
         }
 
-        return redirect("/board");
+        return redirect("/");
     }
 
     /************************************************
@@ -247,7 +249,7 @@ class BoardController extends Controller
      * 投稿画像を保存する
      * @param  $lastInsertBoardId 投稿ID
      * @param  $request->image 投稿画像
-     * @return view Board/create
+     * @return void
      ************************************************/
     public function imageSave($lastInsertBoardId, $request)
     {

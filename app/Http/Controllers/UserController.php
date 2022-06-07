@@ -20,7 +20,7 @@ class UserController extends Controller
         //ログインユーザ情報を取得する
         $user = Auth::user();
 
-        return view('board/profile', compact('user'));
+        return view('/profile', compact('user'));
     }
 
     /************************************************
@@ -64,7 +64,7 @@ class UserController extends Controller
             $request->image->storeAs('public/profile', $user->id . '.jpg');
         }
         
-        return view('board/profile', compact('user'));
+        return view('/profile', compact('user'));
     }
 
     /************************************************

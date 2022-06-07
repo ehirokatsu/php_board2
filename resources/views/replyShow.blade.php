@@ -1,9 +1,9 @@
-@extends('board/layout')
-@extends('board/nav')
+@extends('layout')
+@extends('nav')
 @section('content')
 <div class="container">
     <div class="row">
-    @include('board/message')
+    @include('message')
         <div class="col-1 col-lg-1">
         </div>
         <div class="col-2 col-lg-2 border border-end-0">
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="row">
-            <a href="/board/{{ $board->id }}" style="text-decoration: none;color: #060606;">
+            <a href="/{{ $board->id }}" style="text-decoration: none;color: #060606;">
                 <p>
                     {{ $board->post_text }}
                 </p>
@@ -82,7 +82,7 @@
                 <div class="col-lg-9">
                 </div>
             </div>
-            <form action="/board/replyStore" method="post" enctype="multipart/form-data">
+            <form action="/replyStore" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_src_id" value="{{ $board->id }}">
 		    <div class="row">
                 @csrf
@@ -110,7 +110,7 @@
                 </div>
                 
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-                    <a href="/board" class="btn btn-light" >
+                    <a href="/" class="btn btn-light" >
                         <span class="small text-secondary">戻る</span>
                     </a>
                 </div>

@@ -1,6 +1,6 @@
-@extends('board/layout')
+@extends('layout')
 @section('content')
-@extends('board/nav')
+@extends('nav')
 @foreach($boards as $board)
 <div class="container">
 	<div class="row">
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			<div class="row">
-        <a href="/board/{{ $board->id }}" style="text-decoration: none;color: #060606;">
+        <a href="/{{ $board->id }}" style="text-decoration: none;color: #060606;">
           <p>
             {{ $board->post_text }}
           </p>
@@ -49,13 +49,13 @@
       <div class="row">
         <!--col内をセンタリングするにはd-flex以降全て必要-->
 				<div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-          <a href="/board/{{ $board->id }}/replyShow" class="btn btn-light" >
+          <a href="/{{ $board->id }}/replyShow" class="btn btn-light" >
             <span class="small text-secondary">返信</span>
           </a>
 				</div>
 				<div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
           @if(!empty($board->reply->src_post_id))
-            <a href="/board/{{ $board->reply->src_post_id }}" class="btn btn-light">
+            <a href="/{{ $board->reply->src_post_id }}" class="btn btn-light">
             <span class="small text-secondary">
             返信先
             </span>
@@ -64,7 +64,7 @@
 				</div>
 				<div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
           @if($board->user->id === Auth::id())
-            <a href="/board/{{ $board->id }}/edit" class="btn btn-light">
+            <a href="/{{ $board->id }}/edit" class="btn btn-light">
               <span class="small text-secondary">編集</span>
             </a>
           @endif
@@ -72,7 +72,7 @@
 				<div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
           @if($board->user->id === Auth::id())
             <!--form内は下側に若干スペースが出来る。中央揃えにするにはmargin:autoが必要-->
-            <form action="/board/{{ $board->id }}" method="post" style="margin: auto;">
+            <form action="/{{ $board->id }}" method="post" style="margin: auto;">
               @method('DELETE')
               @csrf
               <button type="submit" class="btn btn-danger">

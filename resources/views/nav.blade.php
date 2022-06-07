@@ -7,14 +7,14 @@
             <!--liクラス全てを中央配置にするのでulクラスにd-flex以降を記述する-->
             <ul class="navbar-nav d-flex align-items-center justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">TOP</a>
+                    <a class="nav-link" href="/">TOP</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/board/create">新規投稿</a>
+                  <a class="nav-link" href="/create">新規投稿</a>
                 </li>
                 <div></div>
                 <li class="nav-item">
-                    <a class="nav-link" href="/board/profile">設定</a>
+                    <a class="nav-link" href="/profile">設定</a>
                 </li>
                 <li class="nav-item">
                   <div class="icon">

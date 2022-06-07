@@ -1,5 +1,5 @@
-@extends('board/layout')
-@extends('board/nav')
+@extends('layout')
+@extends('nav')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('ユーザー情報') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="/board/profile" enctype="multipart/form-data">
+                    <form method="POST" action="/profile" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <!--自分のメールアドレスを検証から除外する用-->
@@ -99,7 +99,7 @@
                             </div>
                     </form>
                             <div class="col-md-3">
-                                <form method="POST" action="/board/{{ $user->id }}/profile" enctype="multipart/form-data">
+                                <form method="POST" action="/{{ $user->id }}/profile" enctype="multipart/form-data">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-delete">
@@ -108,7 +108,7 @@
                                 </form>
                             </div>
                             <div class="col-md-2">
-                                <a href="/board" class="btn btn-light" >
+                                <a href="/" class="btn btn-light" >
                                     <span class="small text-secondary">
                                         戻る
                                     </span>

@@ -1,9 +1,9 @@
-@extends('board/layout')
-@extends('board/nav')
+@extends('layout')
+@extends('nav')
 @section('content')
 <div class="container">
     <div class="row">
-        @include('board/message')
+        @include('message')
         <div class="col-1 col-lg-1">
         </div>
         <div class="col-2 col-lg-2 border border-end-0">
@@ -52,13 +52,13 @@
 
             <div class="row">
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-                    <a href="/board/{{ $board->id }}/reply" class="btn btn-light" >
+                    <a href="/{{ $board->id }}/replyShow" class="btn btn-light" >
                         <span class="small text-secondary">返信</span>
                     </a>
                 </div>
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
                 @if(!empty($board->reply->src_post_id))
-                    <a href="/board/{{ $board->reply->src_post_id }}" class="btn btn-light">
+                    <a href="/{{ $board->reply->src_post_id }}" class="btn btn-light">
                         <span class="small text-secondary">
                         返信先
                         </span>
@@ -69,7 +69,7 @@
                 </div>
                 
                 <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
-                    <a href="/board" class="btn btn-light" >
+                    <a href="/" class="btn btn-light" >
                         <span class="small text-secondary">戻る</span>
                     </a>
                 </div>
