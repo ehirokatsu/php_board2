@@ -18,7 +18,13 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!--ユーザ画像プレビュー用に使用-->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
 </head>
+<!--ユーザ画像プレビュー用に使用-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="{{ asset('/js/javascript.js') }}"></script>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">

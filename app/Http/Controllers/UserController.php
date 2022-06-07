@@ -13,14 +13,14 @@ class UserController extends Controller
     /************************************************
      * ログインユーザの一覧画面の表示
      * @param 
-     * @return view Board/profile
+     * @return view Board/user
      ************************************************/
-    public function profile()
+    public function user()
     {
         //ログインユーザ情報を取得する
         $user = Auth::user();
 
-        return view('/profile', compact('user'));
+        return view('/user', compact('user'));
     }
 
     /************************************************
@@ -33,7 +33,7 @@ class UserController extends Controller
      * @param  $id 投稿ID
      * @return view Board
      ************************************************/
-    public function profileUpdate(UserRequest $request)
+    public function userUpdate(UserRequest $request)
     {
         //ログインユーザ情報を取得する
         $user = Auth::user();
@@ -61,10 +61,10 @@ class UserController extends Controller
 
         //ユーザ画像が入力されていれば更新する
         if (!empty($request->image)) {
-            $request->image->storeAs('public/profile', $user->id . '.jpg');
+            $request->image->storeAs('public/user', $user->id . '.jpg');
         }
         
-        return view('/profile', compact('user'));
+        return view('/user', compact('user'));
     }
 
     /************************************************
@@ -72,7 +72,7 @@ class UserController extends Controller
      * @param  $id 投稿ID
      * @return view Board
      ************************************************/
-    public function profileDestroy($id)
+    public function userDestroy($id)
     {
 
         //投稿を削除する
@@ -81,8 +81,8 @@ class UserController extends Controller
         $user->delete();
 
         //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists('public/profile/' . $id . '.jpg')) {
-            Storage::disk('local')->delete('public/profile/' . $id . '.jpg');
+        if (Storage::disk('local')->exists('public/user/' . $id . '.jpg')) {
+            Storage::disk('local')->delete('public/user/' . $id . '.jpg');
         }
 
         return redirect("/login");

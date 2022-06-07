@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('ユーザー情報') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="/profile" enctype="multipart/form-data">
+                    <form method="POST" action="/user" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <!--自分のメールアドレスを検証から除外する用-->
@@ -99,7 +99,7 @@
                             </div>
                     </form>
                             <div class="col-md-3">
-                                <form method="POST" action="/{{ $user->id }}/profile" enctype="multipart/form-data">
+                                <form method="POST" action="/{{ $user->id }}/user" enctype="multipart/form-data">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-delete">

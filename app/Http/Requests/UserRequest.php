@@ -23,7 +23,6 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        var_dump($this->image);
         $rules = [
 
             'name' => 'nullable|string|max:255',

@@ -60,11 +60,26 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
-                        <!-- プロフィール画像投稿 -->
+                        <!-- ユーザー画像投稿 -->
                         <div class="row mb-3">
-                            <label for="" class="col-md-4 col-form-label text-md-end">プロフィール画像</label>
+                            <label for="" class="col-md-4 col-form-label text-md-end">ユーザー画像</label>
                             <div class="col-md-6">
-                                <input type="file" name="image">
+                                <div class="imagePreviewPre">
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="col-3 col-lg-3  offset-lg-3 d-flex align-items-center justify-content-center">
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-info">
+                                            画像<input type="file" name="image" style="display:none" class="uploadFile is-invalid">
+                                        </span>
+                                    </label>
+                                </div>
+                                 @error('image')
+                                    <div class="alert alert-danger col-3 col-lg-7  offset-lg-4 d-flex align-items-center justify-content-center">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-0">

@@ -1,9 +1,9 @@
 <?php
 Auth::routes();
-Route::get('/profile', 'App\Http\Controllers\UserController@profile')->middleware('auth');
-Route::put('/profile', 'App\Http\Controllers\UserController@profileUpdate')->middleware('auth');
+Route::get('/user', 'App\Http\Controllers\UserController@user')->middleware('auth');
+Route::put('/user', 'App\Http\Controllers\UserController@userUpdate')->middleware('auth');
 
-Route::delete('/{id}/profile', 'App\Http\Controllers\UserController@profileDestroy')->middleware('auth');
+Route::delete('/{id}/user', 'App\Http\Controllers\UserController@userDestroy')->middleware('auth');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
