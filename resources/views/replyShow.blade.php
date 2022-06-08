@@ -51,7 +51,7 @@
             </p>
             @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
             <figure>
-              <img src="/storage/images/{{$board->id}}.jpg" height="300px">
+              <img class="img-show" src="/storage/images/{{$board->id}}.jpg">
             </figure>
             @endif
           </a>

@@ -3,25 +3,29 @@
  * プレビュー画面を表示する
  **********************************************/
 $(document).on('change', ':file', function() {
-    var input = $(this),
-    numFiles = input.get(0).files ? input.get(0).files.length : 1,
-    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-    input.parent().parent().next(':text').val(label);
 
     var files = !!this.files ? this.files : [];
     if (!files.length || !window.FileReader) {
         return;
     }
-    if (/^image/.test( files[0].type)){ // only image file
-        var reader = new FileReader(); // instance of the FileReader
-        reader.readAsDataURL(files[0]); // read the local file
-        reader.onloadend = function(){ // set image data as background of div
-            input.parent().parent().parent().parent().prev().children().next().children('.imagePreview').css("background-image", "url("+this.result+")");
-        }
-        $('.imagePreviewPre').addClass('imagePreview');
+    if (/^image/.test( files[0].type)){
+        var reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+        
+        reader.onloadend = function(){
+            //前回選択した画像を削除する
+            $('.img-create').remove();
 
-        //編集画面で既存画像があれば非表示にする
-        $('.imagePreviewEdit').css('display', 'none');
+            //画像プレビュー用クラスを追加する
+            $('.imagePreviewPre').addClass('imagePreview');
+
+            //選択した画像をimg要素として追加する
+            var add = '<img class="img-create" src="'+this.result+'">';
+            $('.imagePreview').append(add);
+
+            //編集画面で既存画像があれば非表示にする
+            $('.imagePreviewEdit').css('display', 'none');
+        }
     } else {
         window.alert('画像ファイルではありません');
     }
