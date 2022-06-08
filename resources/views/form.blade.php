@@ -49,14 +49,19 @@
       </div>
       <!--投稿画像表示用-->
       <div class="row" style="padding:15px;">
-        <div class="imagePreviewPre">
+        <!--画像プレビュー表示用ダミー-->
+        <div class="">
         </div>
-        <div class="imagePreviewEdit">
-          @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
-            <figure>
-              <img src="/storage/images/{{$board->id}}.jpg">
-            </figure>
-          @endif
+        <div class="">
+          <div class="imagePreviewPre">
+          </div>
+          <div class="imagePreviewEdit">
+            @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
+              <figure>
+                <img src="/storage/images/{{$board->id}}.jpg">
+              </figure>
+            @endif
+          </div>
         </div>
       </div>
       <!--各ボタン表示用-->

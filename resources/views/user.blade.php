@@ -58,9 +58,11 @@
                   <input id="password-confirm" type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
                 </div>
               </div>
-              <div class="row mb-3" style="padding:15px;">
-                <label for="" class="col-md-4 col-form-label text-md-end">{{ __('ユーザー画像') }}</label>
-                <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="" class="col-md-4 col-form-label text-md-end">
+                  {{ __('ユーザー画像') }}
+                </label>
+                <div class="col-md-6 d-flex align-items-center">
                   <div class="imagePreviewPre">
                   </div>
                   <div class="imagePreviewEdit">
@@ -68,23 +70,25 @@
                       <figure>
                         <img src="/storage/profile/{{$user-> id}}.jpg" width="400px">
                       </figure>
+                    @else
+                      <div class="">ユーザー画像は登録されていません。</div>
                     @endif
                   </div>
                 </div>
-                <div class="">
-                  <div class="col-3 col-lg-3  offset-lg-3 d-flex align-items-center justify-content-center">
-                    <label class="input-group-btn">
-                      <span class="btn btn-info">
-                        画像<input type="file" name="image" style="display:none" class="uploadFile is-invalid">
-                      </span>
-                    </label>
-                  </div>
-                  @error('image')
-                    <div class="alert alert-danger col-3 col-lg-7  offset-lg-4 d-flex align-items-center justify-content-center">
-                        <strong>{{ $message }}</strong>
-                    </div>
-                  @enderror
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 offset-md-4">
+                  <label class="input-group-btn">
+                    <span class="btn btn-info">
+                      画像<input type="file" name="image" style="display:none" class="uploadFile is-invalid">
+                    </span>
+                  </label>
                 </div>
+                @error('image')
+                  <div class="alert alert-danger col-3 col-lg-7  offset-lg-4 d-flex align-items-center justify-content-center">
+                      <strong>{{ $message }}</strong>
+                  </div>
+                @enderror
               </div>
               <div class="row mb-0">
                 <div class="col-md-3 offset-md-4">

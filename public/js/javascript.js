@@ -16,7 +16,7 @@ $(document).on('change', ':file', function() {
         var reader = new FileReader(); // instance of the FileReader
         reader.readAsDataURL(files[0]); // read the local file
         reader.onloadend = function(){ // set image data as background of div
-            input.parent().parent().parent().parent().prev().children('.imagePreview').css("background-image", "url("+this.result+")");
+            input.parent().parent().parent().parent().prev().children().next().children('.imagePreview').css("background-image", "url("+this.result+")");
         }
         $('.imagePreviewPre').addClass('imagePreview');
 
