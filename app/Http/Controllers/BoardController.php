@@ -25,6 +25,8 @@ class BoardController extends Controller
         $user = Auth::user();
 
         //投稿された順番に変更し、1ページ10投稿まで表示する
+        $boards = Board::with('user')->get();
+        $boards = Board::with('reply')->get();
         $boards = Board::orderBy('id', 'desc')->simplePaginate(10);
 
         $param = ['boards' => $boards, 'user' => $user];
@@ -121,9 +123,12 @@ class BoardController extends Controller
         //選択した投稿のIDから行を取得する
         $board = board::findOrFail($id);
 
+        //画像のみの投稿の場合は空文字にする
         if(empty($request->post_text)){
             $request->post_text = "";
         }
+
+        //Boardテーブルに上書きする
         $board->post_text = $request->post_text;
         $board->send_date = $today;
         $board->save();
@@ -135,7 +140,6 @@ class BoardController extends Controller
                 //前の画像を削除する
                 Storage::disk('local')->delete('public/images/' . $id . '.jpg');
             }
-
             //画像保存する
             $request->image->storeAs('public/images', $id . '.jpg');
         }
@@ -180,6 +184,7 @@ class BoardController extends Controller
     public function replyShow($id)
     {
         //先にwithで結合してからfindしないとエラーになる
+        $board = Board::with('user')->get();
         $board = Board::findOrFail($id);
 
         //Navバー表示のためログインユーザ情報を渡す
@@ -233,9 +238,12 @@ class BoardController extends Controller
         //投稿内容をinsertする
         $board = new Board;
        
+        //画像のみの投稿の場合は空文字にする
         if(empty($post_text)){
             $post_text = "";
         }
+
+        //Boardテーブルに書き込む
         $board->post_text = $post_text;
         $board->send_date = $today;
         $board->user_id = $user->id;

@@ -87,8 +87,8 @@
             <form action="/{{ $board->id }}" method="post" style="margin: auto;">
               @method('DELETE')
               @csrf
-              <button type="submit" class="btn btn-danger">
-                <span class="small text-light btn-delete">削除</span>
+              <button type="submit" class="btn btn-danger btn-delete">
+                <span class="small text-light">削除</span>
               </button>
             </form>
           @endif
