@@ -28,7 +28,7 @@ class BoardRequest extends FormRequest
         //post_textのみに付与する
         return [
             'post_text' => 'nullable|required_without:image|max:140|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable|image|mimes:jpg|max:1024',
         ];
     }
     public function messages()
@@ -39,6 +39,8 @@ class BoardRequest extends FormRequest
             'post_text.string' => '投稿は文字列で入力してください',
             'post_text.max' => '投稿の最大値は140文字です',
             'image.image' => '画像ファイルを選択してください',
+            'image.mimes' => '指定された拡張子（JPG）ではありません。',
+            'image.max' => '画像は1MB以下を選択してください。',
         ];
     }
 }

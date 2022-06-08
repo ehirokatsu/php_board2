@@ -66,9 +66,9 @@
                   <div class="imagePreviewPre">
                   </div>
                   <div class="imagePreviewEdit">
-                    @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
+                    @if(Storage::disk('local')->exists('public/user/' . $user->id . '.jpg'))
                       <figure>
-                        <img src="/storage/profile/{{$user-> id}}.jpg" width="400px">
+                        <img class="img-create" src="/storage/user/{{$user-> id}}.jpg">
                       </figure>
                     @else
                       <div class="">ユーザー画像は登録されていません。</div>

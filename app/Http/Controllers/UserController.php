@@ -55,7 +55,6 @@ class UserController extends Controller
             if ($request->password === $request->password_confirmation) {
                  $user->password = Hash::make($request->password);
             }
-            
         }
         $user->save();
 

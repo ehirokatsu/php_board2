@@ -8,13 +8,13 @@
     <!--ユーザー画像表示用-->
     <div class="col-2 col-lg-2 border border-end-0">
       <div class="row">
-        @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
+        @if(Storage::disk('local')->exists('public/user/' . $user->id . '.jpg'))
           <figure>
-            <img src="/storage/profile/{{$user-> id}}.jpg" width="100px" height="100px">
+            <img src="/storage/user/{{$user-> id}}.jpg" width="100px" height="100px">
           </figure>
         @else
           <figure>
-            <img src="/storage/profile/0.jpg" width="100px" height="100px">
+            <img src="/storage/user/0.jpg" width="100px" height="100px">
           </figure>
         @endif
       </div>

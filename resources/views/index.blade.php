@@ -11,13 +11,13 @@
     <!--ユーザー画像表示用-->
     <div class="col-2 col-lg-1 border border-end-0">
       <div class="row">
-          @if(Storage::disk('local')->exists('public/profile/' . $board->user->id . '.jpg'))
+          @if(Storage::disk('local')->exists('public/user/' . $board->user->id . '.jpg'))
             <figure>
-              <img src="/storage/profile/{{$board->user-> id}}.jpg" width="50px" height="50px">
+              <img src="/storage/user/{{$board->user->id}}.jpg" width="50px" height="50px">
               </figure>
           @else
             <figure>
-              <img src="/storage/profile/0.jpg" width="50px" height="50px">
+              <img src="/storage/user/0.jpg" width="50px" height="50px">
             </figure>
           @endif
       </div>

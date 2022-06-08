@@ -72,7 +72,7 @@ class RegisterController extends Controller
 
         ////画像保存
         if (!empty($data['image'])) {
-            $data['image']->storeAs('public/profile', $user->id . '.jpg');
+            $data['image']->storeAs('public/user', $user->id . '.jpg');
         }
 
         return $user;

@@ -19,14 +19,14 @@
       <li class="nav-item">
         <div class="icon">
           <!--ユーザー画像を表示する-->
-          @if(Storage::disk('local')->exists('public/profile/' . $user->id . '.jpg'))
+          @if(Storage::disk('local')->exists('public/user/' . $user->id . '.jpg'))
             <figure>
-              <img src="/storage/profile/{{$user-> id}}.jpg" width="50px" height="50px">
+              <img src="/storage/user/{{$user-> id}}.jpg" width="50px" height="50px">
             </figure>
           <!--ユーザー画像が未登録であればデフォルト画像を登録する-->
           @else
             <figure>
-              <img src="/storage/profile/0.jpg" width="50px" height="50px">
+              <img src="/storage/user/0.jpg" width="50px" height="50px">
             </figure>
           @endif
           <!--ユーザ画像をマウスオーバーした時に表示する-->
