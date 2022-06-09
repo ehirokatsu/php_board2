@@ -63,8 +63,18 @@ class UserController extends Controller
         if (!empty($request->image)) {
             $request->image->storeAs('public/user', $user->id . '.jpg');
         }
-        
-        return view('/user', compact('user'));
+
+        //画像削除チェックボックスがONなら画像を削除する
+        //$request->image_deleteにはvalue値が格納される
+        if ($request->image_delete
+         && Storage::disk('local')->exists('public/user/' . $user->id . '.jpg')
+         ) {
+             
+            //投稿していた画像を削除する
+            Storage::disk('local')->delete('public/user/' . $user->id . '.jpg');
+        }
+        //return view('/user', compact('user'))->with('message', '更新しました。');
+        return redirect('/user')->with('message', '更新しました。');
     }
 
     /************************************************

@@ -9,6 +9,11 @@
           </div>
           <div class="card-body">
             <div class="row mb-3">
+              @if (session('message'))
+              <div class="alert alert-success">
+                  {{ session('message') }}
+              </div>
+              @endif
               <ui>
                 <li>更新したい項目を入力して更新ボタンを押してください。</li>
                 <li>パスワードを変更する時は、パスワード項目とパスワード確認項目の両方を入力してください。</li>
@@ -77,12 +82,16 @@
                 </div>
               </div>
               <div class="row mb-3">
-                <div class="col-md-3 offset-md-4">
+                <div class="col-md-2 offset-md-4">
                   <label class="input-group-btn">
                     <span class="btn btn-info">
                       画像<input type="file" name="image" style="display:none" class="uploadFile is-invalid">
                     </span>
                   </label>
+                </div>
+                <div class="col-md-2">
+                  <input type="checkbox" class="form-check-input" name="image_delete" id="check1"  value="check1" >
+                  <label class="form-check-label" for="check1">画像削除</label>
                 </div>
                 @error('image')
                   <div class="alert alert-danger col-3 col-lg-7  offset-lg-4 d-flex align-items-center justify-content-center">
