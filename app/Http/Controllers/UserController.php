@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -50,7 +51,7 @@ class UserController extends Controller
 
         //パスワードが入力されていれば更新する
         if (!empty($request->password)
-         && !empty($request->_confirmation)
+         && !empty($request->password_confirmation)
          ) {
             if ($request->password === $request->password_confirmation) {
                  $user->password = Hash::make($request->password);

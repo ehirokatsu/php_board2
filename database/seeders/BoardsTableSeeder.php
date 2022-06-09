@@ -16,17 +16,11 @@ class BoardsTableSeeder extends Seeder
     public function run()
     {
         $param = [
-            'post_text' => 'test123',
+            'post_text' => 'テスト投稿',
             'send_date' => '2022-04-30 11:18:11',
             'user_id' => 1
         ];
         DB::table('boards')->insert($param);
 
-        $param = [
-            'post_text' => 'test456',
-            'send_date' => '2022-05-01 11:18:11',
-            'user_id' => 2
-        ];
-        DB::table('boards')->insert($param);
     }
 }
