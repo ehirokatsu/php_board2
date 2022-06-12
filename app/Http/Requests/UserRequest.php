@@ -27,8 +27,9 @@ class UserRequest extends FormRequest
 
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users,email',
-            'password' => 'nullable|string|min:8|confirmed',
-            'image' => 'nullable|image|mimes:jpg|max:1024',
+            'current_password' => 'nullable|required_with:password|string|min:8',
+            'password' => 'nullable|required_with:current_password|string|min:8|confirmed',
+            'image' => 'nullable|image|mimes:jpg,png,svg,gif|max:1024',
         ];
 
         //自分のメールアドレスは検証から除外する
@@ -48,11 +49,15 @@ class UserRequest extends FormRequest
             'email.email' => 'メールアドレスの形式が間違っています',
             'email.max' => 'メールアドレスの最大値は255文字です',
             'email.unique' => 'メールアドレスが既に登録されています',
+            'current_password.string' => '現在のパスワードは文字列で入力してください',
+            'current_password.min' => '現在のパスワードは8文字以上で入力してください',
+            'current_password.required_with' => '現在のパスワードを入力してください。',
             'password.string' => 'パスワードは文字列で入力してください',
             'password.min' => 'パスワードは8文字以上で入力してください',
+            'password.required_with' => '新しいパスワードを入力してください。',
             'password.confirmed' => 'パスワード確認項目と一致しません',
             'image.image' => '画像ファイルを選択してください',
-            'image.mimes' => '指定された拡張子（JPG）ではありません。',
+            'image.mimes' => '指定された拡張子（JPG,PNG,GIF,SVG）ではありません。',
             'image.max' => '画像は1MB以下を選択してください。',
         ];
     }

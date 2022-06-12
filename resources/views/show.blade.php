@@ -10,15 +10,9 @@
     <!--ユーザー画像表示用-->
     <div class="col-2 col-lg-2 border border-end-0">
       <div class="row">
-        @if(Storage::disk('local')->exists('public/user/' . $board->user->id . '.jpg'))
-          <figure>
-            <img src="/storage/user/{{$board->user-> id}}.jpg" width="100px" height="100px">
-          </figure>
-        @else
-          <figure>
-            <img src="/storage/user/0.jpg" width="100px" height="100px">
-          </figure>
-        @endif
+      <figure>
+        <img src="{{$board->getBoardUserImagePath()}}" width="50px" height="50px">
+      </figure>
       </div>
     </div>
     <!--投稿内容表示用-->
@@ -40,11 +34,9 @@
         <p>
           {{ $board->post_text }}
         </p>
-        @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
           <figure>
-            <img class="img-show" src="/storage/images/{{$board->id}}.jpg">
+            <img class="img-show" src="{{$board->getBoardImagePath()}}">
           </figure>
-        @endif
       </div>
       <!--各ボタン表示用-->
       <div class="row">

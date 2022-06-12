@@ -116,6 +116,10 @@ class BoardController extends Controller
      ************************************************/
     public function update(BoardRequest $request, $id)
     {
+
+        //投稿画像の保存場所を取得する(public以下)
+        $boardImagePath = \Config::get('filepath.boardImagePath');
+
         //現在日時を取得する
         date_default_timezone_set('Asia/Tokyo');
         $today = date("Y-m-d H:i:s");
@@ -132,28 +136,27 @@ class BoardController extends Controller
         $board->post_text = $request->post_text;
         $board->send_date = $today;
         $board->save();
-
         //画像がアップロードされている場合
         if (!empty($request->image)) {
             //すでに画像投稿されている場合
-            if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
+            if (Storage::disk('local')->exists('public/' . $boardImagePath . $board->getBoardImageName())) {
                 //前の画像を削除する
-                Storage::disk('local')->delete('public/images/' . $id . '.jpg');
+                Storage::disk('local')->delete('public/' . $boardImagePath . $board->getBoardImageName());
             }
             //画像保存する
-            $request->image->storeAs('public/images', $id . '.jpg');
+            $request->image->storeAs('public/',$boardImagePath . $board->id . '.' .$request->image->guessExtension());
         }
 
         //画像削除チェックボックスがONなら画像を削除する
         //$request->image_deleteにはvalue値が格納される
         if ($request->image_delete
-         && Storage::disk('local')->exists('public/images/' . $id . '.jpg')
+         && Storage::disk('local')->exists('public/' . $boardImagePath . $board->getBoardImageName())
          ) {
-             
-            //投稿していた画像を削除する
-            Storage::disk('local')->delete('public/images/' . $id . '.jpg');
-        }
 
+            //投稿していた画像を削除する
+            Storage::disk('local')->delete('public/' . $boardImagePath . $board->getBoardImageName());
+        }
+        
         return redirect("/");
     }
 
@@ -164,14 +167,18 @@ class BoardController extends Controller
      ************************************************/
     public function destroy($id)
     {
+        //投稿画像の保存場所を取得する(public以下)
+        $boardImagePath = \Config::get('filepath.boardImagePath');
+
         //投稿を削除する
         $board = board::findOrFail($id);
-        $board->delete();
 
         //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists('public/images/' . $id . '.jpg')) {
-            Storage::disk('local')->delete('public/images/' . $id . '.jpg');
+        if (Storage::disk('local')->exists('public/' . $boardImagePath . getBoardImageName())) {
+            Storage::disk('local')->delete('public/' . $boardImagePath . getBoardImageName());
         }
+
+        $board->delete();
 
         return redirect("/");
     }
@@ -213,7 +220,7 @@ class BoardController extends Controller
         $reply->save();
         
         
-        //投稿に画像があれば削除する
+        //投稿に画像があれば保存する
         if (!empty($request->image)) {
             $this->imageSave($lastInsertBoardId, $request);
         }
@@ -255,12 +262,14 @@ class BoardController extends Controller
 
     /************************************************
      * 投稿画像を保存する
-     * @param  $lastInsertBoardId 投稿ID
+     * @param  $id 投稿ID
      * @param  $request->image 投稿画像
      * @return void
      ************************************************/
-    public function imageSave($lastInsertBoardId, $request)
+    public function imageSave($id, $request)
     {
-        $request->image->storeAs('public/images', $lastInsertBoardId . '.jpg');
+        $boardImagePath = \Config::get('filepath.boardImagePath');
+
+        $request->image->storeAs('public/',$boardImagePath . $id . '.' .$request->image->guessExtension());
     }
 }

@@ -47,10 +47,10 @@
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('パスワード') }}</label>
+                <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('現在のパスワード') }}</label>
                 <div class="col-md-6">
-                  <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
-                    @error('password')
+                  <input id="password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" autocomplete="new-password">
+                  @error('current_password')
                     <span class="invalid-feedback" role="alert">
                       <strong>{{ $message }}</strong>
                     </span>
@@ -58,9 +58,25 @@
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('パスワード確認') }}</label>
+                <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('新しいパスワード') }}</label>
+                <div class="col-md-6">
+                  <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
+                  @error('password')
+                    <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('新しいパスワード確認') }}</label>
                 <div class="col-md-6">
                   <input id="password-confirm" type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
+                  @error('password_confirmation')
+                    <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
                 </div>
               </div>
               <div class="row mb-3">
@@ -71,13 +87,9 @@
                   <div class="imagePreviewPre">
                   </div>
                   <div class="imagePreviewEdit">
-                    @if(Storage::disk('local')->exists('public/user/' . $user->id . '.jpg'))
                       <figure>
-                        <img class="img-create" src="/storage/user/{{$user-> id}}.jpg">
+                        <img class="img-create" src="{{$user->getUserImagePath()}}">
                       </figure>
-                    @else
-                      <div class="">ユーザー画像は登録されていません。</div>
-                    @endif
                   </div>
                 </div>
               </div>

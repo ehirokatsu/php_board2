@@ -19,16 +19,9 @@
       <li class="nav-item">
         <div class="icon">
           <!--ユーザー画像を表示する-->
-          @if(Storage::disk('local')->exists('public/user/' . $user->id . '.jpg'))
-            <figure>
-              <img src="/storage/user/{{$user-> id}}.jpg" width="50px" height="50px">
-            </figure>
-          <!--ユーザー画像が未登録であればデフォルト画像を登録する-->
-          @else
-            <figure>
-              <img src="/storage/user/0.jpg" width="50px" height="50px">
-            </figure>
-          @endif
+          <figure>
+            <img src="{{$user->getUserImagePath()}}" width="50px" height="50px">
+          </figure>
           <!--ユーザ画像をマウスオーバーした時に表示する-->
           <div class="user-info">
             <span>ユーザ名：{{$user->name}}</span>

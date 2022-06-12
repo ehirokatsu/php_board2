@@ -70,11 +70,19 @@ class RegisterController extends Controller
         $user->password = Hash::make($data['password']);
         $user->save();
 
+        //configから保存場所を取得する
+        $userImagePath = \Config::get('filepath.userImagePath');
+
+        //画像保存
+        if (!empty($data['image'])) {
+            $data['image']->storeAs('public/',$userImagePath . $user->id . '.' .$data['image']->guessExtension());
+        }
+        /*
         ////画像保存
         if (!empty($data['image'])) {
             $data['image']->storeAs('public/user', $user->id . '.jpg');
         }
-
+*/
         return $user;
     }
 }

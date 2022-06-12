@@ -8,15 +8,9 @@
     <!--ユーザー画像表示用-->
     <div class="col-2 col-lg-2 border border-end-0">
       <div class="row">
-        @if(Storage::disk('local')->exists('public/user/' . $user->id . '.jpg'))
-          <figure>
-            <img src="/storage/user/{{$user-> id}}.jpg" width="100px" height="100px">
-          </figure>
-        @else
-          <figure>
-            <img src="/storage/user/0.jpg" width="100px" height="100px">
-          </figure>
-        @endif
+      <figure>
+        <img src="{{$user->getUserImagePath()}}" width="50px" height="50px">
+      </figure>
       </div>
     </div>
     <!--投稿フォーム表示用-->
@@ -56,11 +50,9 @@
           <div class="imagePreviewPre">
           </div>
           <div class="imagePreviewEdit">
-            @if(Storage::disk('local')->exists('public/images/' . $board->id . '.jpg'))
-              <figure>
-                <img class="img-create" src="/storage/images/{{$board->id}}.jpg">
-              </figure>
-            @endif
+          <figure>
+            <img class="img-create" src="{{$board->getBoardImagePath()}}">
+          </figure>
           </div>
         </div>
       </div>
