@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('src_post_id')->unsigned();
             $table->primary('post_id');
             $table->foreign('post_id')->references('id')->on('boards')->onDelete('CASCADE');
+            $table->foreign('src_post_id')->references('id')->on('boards')->onDelete('CASCADE');
             $table->timestamps();
         });
     }

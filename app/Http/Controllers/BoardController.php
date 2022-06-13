@@ -44,6 +44,7 @@ class BoardController extends Controller
     {
 
         //選択した投稿のIDから行を取得する
+        $board = Board::with('user')->get();
         $board = board::findOrFail($id);
 
         //Navバー表示のためログインユーザ情報を渡す
