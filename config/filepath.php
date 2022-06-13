@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'userImagePath' => 'user/',
-    'boardImagePath' => 'images/',
+    'userImageFolder' => 'user/',
+    'boardImageFolder' => 'images/',
 ];

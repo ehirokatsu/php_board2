@@ -85,4 +85,19 @@ class RegisterController extends Controller
 */
         return $user;
     }
+
+        /************************************************
+     * ログインユーザの一覧画面の表示
+     * @param 
+     * @return view Board/user
+     ************************************************/
+    public function user()
+    {
+        //ログインユーザ情報を取得する
+        $user = Auth::user();
+
+        return view('/user', compact('user'));
+    }
+
+    
 }

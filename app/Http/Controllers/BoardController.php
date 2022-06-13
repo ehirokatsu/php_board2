@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\BoardRequest;
 use Illuminate\Support\Facades\Auth;
 
+
 class BoardController extends Controller
 {
 
@@ -20,7 +21,7 @@ class BoardController extends Controller
      ************************************************/
     public function index(Request $request)
     {
-
+        //\Util::hello();
         //ログインユーザ情報を取得する
         $user = Auth::user();
 
@@ -116,10 +117,6 @@ class BoardController extends Controller
      ************************************************/
     public function update(BoardRequest $request, $id)
     {
-
-        //投稿画像の保存場所を取得する(public以下)
-        $boardImagePath = \Config::get('filepath.boardImagePath');
-
         //現在日時を取得する
         date_default_timezone_set('Asia/Tokyo');
         $today = date("Y-m-d H:i:s");
@@ -136,25 +133,37 @@ class BoardController extends Controller
         $board->post_text = $request->post_text;
         $board->send_date = $today;
         $board->save();
+
+        //configから投稿画像の保存フォルダーを取得する
+        $boardImageFolder = \Config::get('filepath.boardImageFolder');
+
+        //投稿画像のファイル名を取得する
+        $imageName = \Util::getImageName($id, $boardImageFolder);
+
+        //投稿画像の保存場所
+        $boardImagePath = 'public/' . $boardImageFolder . $imageName;
+
         //画像がアップロードされている場合
         if (!empty($request->image)) {
+
             //すでに画像投稿されている場合
-            if (Storage::disk('local')->exists('public/' . $boardImagePath . $board->getBoardImageName())) {
+            if (Storage::disk('local')->exists($boardImagePath)) {
+
                 //前の画像を削除する
-                Storage::disk('local')->delete('public/' . $boardImagePath . $board->getBoardImageName());
+                Storage::disk('local')->delete($boardImagePath);
             }
-            //画像保存する
-            $request->image->storeAs('public/',$boardImagePath . $board->id . '.' .$request->image->guessExtension());
+
+            //新しい投稿画像ｗｐ保存する
+            $request->image->storeAs('public/',$boardImageFolder . $board->id . '.' .$request->image->guessExtension());
         }
 
         //画像削除チェックボックスがONなら画像を削除する
         //$request->image_deleteにはvalue値が格納される
         if ($request->image_delete
-         && Storage::disk('local')->exists('public/' . $boardImagePath . $board->getBoardImageName())
+         && Storage::disk('local')->exists($boardImagePath)
          ) {
-
             //投稿していた画像を削除する
-            Storage::disk('local')->delete('public/' . $boardImagePath . $board->getBoardImageName());
+            Storage::disk('local')->delete($boardImagePath);
         }
         
         return redirect("/");
@@ -167,18 +176,24 @@ class BoardController extends Controller
      ************************************************/
     public function destroy($id)
     {
-        //投稿画像の保存場所を取得する(public以下)
-        $boardImagePath = \Config::get('filepath.boardImagePath');
+        //configから投稿画像の保存フォルダーを取得する
+        $boardImageFolder = \Config::get('filepath.boardImageFolder');
 
         //投稿を削除する
         $board = board::findOrFail($id);
+        $board->delete();
+
+        //投稿画像のファイル名を取得する
+        $imageName = \Util::getImageName($id, $boardImageFolder);
+
+        //投稿画像の保存場所
+        $boardImagePath = 'public/' . $boardImageFolder . $imageName;
 
         //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists('public/' . $boardImagePath . getBoardImageName())) {
-            Storage::disk('local')->delete('public/' . $boardImagePath . getBoardImageName());
-        }
+        if (Storage::disk('local')->exists($boardImagePath)) {
 
-        $board->delete();
+            Storage::disk('local')->delete($boardImagePath);
+        }
 
         return redirect("/");
     }
@@ -219,7 +234,6 @@ class BoardController extends Controller
         $reply->src_post_id = $request->_src_id;
         $reply->save();
         
-        
         //投稿に画像があれば保存する
         if (!empty($request->image)) {
             $this->imageSave($lastInsertBoardId, $request);
@@ -257,7 +271,6 @@ class BoardController extends Controller
         $board->save();
 
         return $board->id;
-
     }
 
     /************************************************
@@ -268,8 +281,8 @@ class BoardController extends Controller
      ************************************************/
     public function imageSave($id, $request)
     {
-        $boardImagePath = \Config::get('filepath.boardImagePath');
+        $boardImageFolder = \Config::get('filepath.boardImageFolder');
 
-        $request->image->storeAs('public/',$boardImagePath . $id . '.' .$request->image->guessExtension());
+        $request->image->storeAs('public/',$boardImageFolder . $id . '.' .$request->image->guessExtension());
     }
 }

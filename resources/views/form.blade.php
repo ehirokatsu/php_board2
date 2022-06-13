@@ -9,7 +9,7 @@
     <div class="col-2 col-lg-2 border border-end-0">
       <div class="row">
       <figure>
-        <img src="{{$user->getUserImagePath()}}" width="50px" height="50px">
+        <img src="{{$user->getLoginUserImageStoragePath()}}" width="50px" height="50px">
       </figure>
       </div>
     </div>
@@ -51,7 +51,7 @@
           </div>
           <div class="imagePreviewEdit">
           <figure>
-            <img class="img-create" src="{{$board->getBoardImagePath()}}">
+            <img class="img-create" src="{{$board->getBoardImageStoragePath()}}">
           </figure>
           </div>
         </div>

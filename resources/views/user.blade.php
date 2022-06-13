@@ -88,7 +88,7 @@
                   </div>
                   <div class="imagePreviewEdit">
                       <figure>
-                        <img class="img-create" src="{{$user->getUserImagePath()}}">
+                        <img class="img-create" src="{{$user->getLoginUserImageStoragePath()}}">
                       </figure>
                   </div>
                 </div>

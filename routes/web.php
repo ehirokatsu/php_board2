@@ -6,7 +6,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/user', 'App\Http\Controllers\UserController@user');
-
+    
     Route::put('/user', 'App\Http\Controllers\UserController@userUpdate');
 
     Route::delete('/{id}/user', 'App\Http\Controllers\UserController@userDestroy')->where('id', '[0-9]+');

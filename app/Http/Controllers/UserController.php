@@ -36,9 +36,6 @@ class UserController extends Controller
      ************************************************/
     public function userUpdate(UserRequest $request)
     {
-        //configから保存場所を取得する
-        $userImagePath = \Config::get('filepath.userImagePath');
-
         //ログインユーザ情報を取得する
         $user = Auth::user();
         
@@ -67,36 +64,36 @@ class UserController extends Controller
         }
         $user->save();
 
-        //すでに画像投稿されている場合
-        $file = $user->getuserImageName();
-        //ユーザ画像が入力されていれば更新する
+        //configからユーザー画像の保存フォルダーを取得する
+        $userImageFolder = \Config::get('filepath.userImageFolder');
+
+        //ユーザー画像のファイル名を取得する
+        $imageName = \Util::getImageName($user->id, $userImageFolder);
+
+        //ユーザー画像の保存場所
+        $userImagePath = 'public/' . $userImageFolder . $imageName;
+
+        //新しいユーザー画像が入力されている場合
         if (!empty($request->image)) {
 
             //すでにユーザー画像が登録されている場合
-            if (Storage::disk('local')->exists('public/' . $userImagePath . $user->getuserImageName())) {
+            if (Storage::disk('local')->exists($userImagePath)) {
                 
-                //0.jpgなら除外する
-                if ($file !== '0.jpg') {
-                    //前の画像を削除する
-                    Storage::disk('local')->delete('public/' . $userImagePath . $user->getuserImageName());
-                }
+                //前の画像を削除する
+                Storage::disk('local')->delete($userImagePath);
             }
 
-            //画像保存する
-            $request->image->storeAs('public/',$userImagePath . $user->id . '.' .$request->image->guessExtension());
+            //新しいユーザー画像保存する
+            $request->image->storeAs('public/',$userImageFolder . $user->id . '.' .$request->image->guessExtension());
         }
 
-        //画像削除チェックボックスがONなら画像を削除する
+        //画像削除チェックボックスがONならユーザー画像を削除する
         //$request->image_deleteにはvalue値が格納される
         if ($request->image_delete
-         && Storage::disk('local')->exists('public/' . $userImagePath . $user->getUserImageName())
+         && Storage::disk('local')->exists($userImagePath)
          ) {
-             
-            //0.jpgなら除外する
-            if ($file !== '0.jpg') {
-                //投稿していた画像を削除する
-                Storage::disk('local')->delete('public/' . $userImagePath . $user->getUserImageName());
-            }
+            //投稿していた画像を削除する
+            Storage::disk('local')->delete($userImagePath);
         }
         return redirect('/user')->with('message', '更新しました。');
     }
@@ -110,20 +107,20 @@ class UserController extends Controller
     {
 
         //configから保存場所を取得する
-        $userImagePath = \Config::get('filepath.userImagePath');
+        $userImageFolder = \Config::get('filepath.userImageFolder');
 
-        //投稿を削除する
+        //ユーザーテーブルから削除する
         $user = Auth::user();
-        //$user = user::findOrFail($id);
+        $user = user::findOrFail($id);
         $user->delete();
-        $file = $user->getuserImageName();
-        //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists('public/' . $userImagePath . $user->getUserImageName())) {
 
-            //0.jpgなら除外する
-            if ($file !== '0.jpg') {
-                Storage::disk('local')->delete('public/' . $userImagePath . $user->getUserImageName());
-            }
+        //ユーザー画像の保存場所
+        $imageName = \Util::getImageName($id, $userImageFolder);
+
+        //投稿に画像があれば削除する
+        if (Storage::disk('local')->exists('public/' . $userImageFolder . $imageName)) {
+
+            Storage::disk('local')->delete('public/' . $userImageFolder . $imageName);
         }
 
         return redirect("/login");

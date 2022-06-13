@@ -20,7 +20,7 @@
         <div class="icon">
           <!--ユーザー画像を表示する-->
           <figure>
-            <img src="{{$user->getUserImagePath()}}" width="50px" height="50px">
+            <img src="{{$user->getLoginUserImageStoragePath()}}" width="50px" height="50px">
           </figure>
           <!--ユーザ画像をマウスオーバーした時に表示する-->
           <div class="user-info">

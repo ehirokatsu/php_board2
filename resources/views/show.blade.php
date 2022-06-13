@@ -11,7 +11,7 @@
     <div class="col-2 col-lg-2 border border-end-0">
       <div class="row">
       <figure>
-        <img src="{{$board->getBoardUserImagePath()}}" width="50px" height="50px">
+        <img src="{{$board->getBoardUserImageStoragePath()}}" width="50px" height="50px">
       </figure>
       </div>
     </div>
@@ -35,7 +35,7 @@
           {{ $board->post_text }}
         </p>
           <figure>
-            <img class="img-show" src="{{$board->getBoardImagePath()}}">
+            <img class="img-show" src="{{$board->getBoardImageStoragePath()}}">
           </figure>
       </div>
       <!--各ボタン表示用-->
