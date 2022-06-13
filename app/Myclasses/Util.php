@@ -6,7 +6,7 @@ class Util
     /************************************************
      * 画像の拡張子を含むファイル名を取得する
      * @param $id ユーザー、または投稿ＩＤ
-	* @param $imageFolder 画像の保存フォルダー
+     * @param $imageFolder 画像の保存フォルダー
      * @return 画像ファイル名。
      ************************************************/
     public function getImageName($id, $imageFolder) {
@@ -51,8 +51,8 @@ class Util
 
         //configから保存場所を取得する
         $userImagePath = \Config::get('filepath.userImageFolder');
-		$userImageStoragePath = '/storage/'. $userImagePath;
-		$imageName = $this->getImageName($id, $userImagePath);
+        $userImageStoragePath = '/storage/'. $userImagePath;
+        $imageName = $this->getImageName($id, $userImagePath);
 
         //当該投稿に画像が含まれている場合
         if ($imageName) {
@@ -62,8 +62,8 @@ class Util
 
         } else {
 
-            return $userImageStoragePath . '0.jpg';
-
+        //ユーザー画像が登録されていなければデフォルト画像を表示する。
+        return $userImageStoragePath . '0.jpg';
         }
     }
 
@@ -77,8 +77,8 @@ class Util
 
         //configから保存場所を取得する
         $boardImagePath = \Config::get('filepath.boardImageFolder');
-		$boardImageStoragePath = '/storage/'. $boardImagePath;
-		$imageName = $this->getImageName($id, $boardImagePath);
+        $boardImageStoragePath = '/storage/'. $boardImagePath;
+        $imageName = $this->getImageName($id, $boardImagePath);
 
         //当該投稿に画像が含まれている場合
         if ($imageName) {

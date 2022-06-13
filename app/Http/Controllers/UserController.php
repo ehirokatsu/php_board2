@@ -114,13 +114,16 @@ class UserController extends Controller
         $user = user::findOrFail($id);
         $user->delete();
 
-        //ユーザー画像の保存場所
+        //ユーザー画像のファイル名を取得する
         $imageName = \Util::getImageName($id, $userImageFolder);
 
-        //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists('public/' . $userImageFolder . $imageName)) {
+        //ユーザー画像の保存場所
+        $userImagePath = 'public/' . $userImageFolder . $imageName;
 
-            Storage::disk('local')->delete('public/' . $userImageFolder . $imageName);
+        //投稿に画像があれば削除する
+        if (Storage::disk('local')->exists($userImagePath)) {
+
+            Storage::disk('local')->delete($userImagePath);
         }
 
         return redirect("/login");
