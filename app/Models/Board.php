@@ -38,7 +38,7 @@ class Board extends Model
      ************************************************/
     public function getBoardImageStoragePath() {
 
-        return \Util::getBoardImagePath($this->id);
+        return \Util::getBoardImageStoragePath($this->id);
 
     }
 

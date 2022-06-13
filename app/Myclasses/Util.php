@@ -1,5 +1,9 @@
 <?php
 namespace App\MyClasses;
+
+use Illuminate\Support\Facades\Auth;
+use App\Models\Board;
+
 class Util
 {
 
@@ -50,9 +54,9 @@ class Util
     public function getUserImageStoragePath($id) {
 
         //configから保存場所を取得する
-        $userImagePath = \Config::get('filepath.userImageFolder');
-        $userImageStoragePath = '/storage/'. $userImagePath;
-        $imageName = $this->getImageName($id, $userImagePath);
+        $userImageFolder = \Config::get('filepath.userImageFolder');
+        $userImageStoragePath = '/storage/'. $userImageFolder;
+        $imageName = $this->getImageName($id, $userImageFolder);
 
         //当該投稿に画像が含まれている場合
         if ($imageName) {
@@ -73,12 +77,12 @@ class Util
      * @param  void
      * @return 投稿画像のパス
      ************************************************/
-    public function getBoardImagePath($id) {
+    public function getBoardImageStoragePath($id) {
 
         //configから保存場所を取得する
-        $boardImagePath = \Config::get('filepath.boardImageFolder');
-        $boardImageStoragePath = '/storage/'. $boardImagePath;
-        $imageName = $this->getImageName($id, $boardImagePath);
+        $boardImageFolder = \Config::get('filepath.boardImageFolder');
+        $boardImageStoragePath = '/storage/'. $boardImageFolder;
+        $imageName = $this->getImageName($id, $boardImageFolder);
 
         //当該投稿に画像が含まれている場合
         if ($imageName) {
@@ -92,5 +96,49 @@ class Util
 
         }
     }
+    
+    /************************************************
+    * 投稿をBoardテーブルにINSERTする
+    * @param  $post_text 投稿テキスト
+    * @return $board->id BoardテーブルにINSERTした時のID
+    ************************************************/
+   public function insertBoard($post_text)
+   {
+       //ログイン中のユーザ名を取得する
+       $user = Auth::user();
 
+       //現在日時を取得する
+       date_default_timezone_set('Asia/Tokyo');
+       $today = date("Y-m-d H:i:s");
+
+       //投稿内容をinsertする
+       $board = new Board;
+      
+       //画像のみの投稿の場合は空文字にする
+       if(empty($post_text)){
+           $post_text = "";
+       }
+
+       //Boardテーブルに書き込む
+       $board->post_text = $post_text;
+       $board->send_date = $today;
+       $board->user_id = $user->id;
+       $board->save();
+
+       return $board->id;
+   }
+
+
+    /************************************************
+     * 投稿画像を保存する
+     * @param  $id 投稿ID
+     * @param  $request 投稿画像
+     * @return void
+     ************************************************/
+    public function boardImageStore($id, $request)
+    {
+        $boardImageFolder = \Config::get('filepath.boardImageFolder');
+
+        $request->image->storeAs('public/',$boardImageFolder . $id . '.' .$request->image->guessExtension());
+    }
 }

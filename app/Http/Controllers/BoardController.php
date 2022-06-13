@@ -80,11 +80,11 @@ class BoardController extends Controller
     {
 
         //boardテーブルに挿入する
-        $lastInsertBoardId = $this->insertBoard($request->post_text);
+        $lastInsertBoardId = \Util::insertBoard($request->post_text);
 
         //画像も投稿されていれば保存する
         if (!empty($request->image)) {
-            $this->imageSave($lastInsertBoardId, $request);
+            \Util::boardImageStore($lastInsertBoardId, $request);
         }
 
         return redirect("/");
@@ -153,8 +153,8 @@ class BoardController extends Controller
                 Storage::disk('local')->delete($boardImagePath);
             }
 
-            //新しい投稿画像ｗｐ保存する
-            $request->image->storeAs('public/',$boardImageFolder . $board->id . '.' .$request->image->guessExtension());
+            //新しい投稿画像を保存する
+            \Util::boardImageStore($board->id, $request);
         }
 
         //画像削除チェックボックスがONなら画像を削除する
@@ -226,7 +226,7 @@ class BoardController extends Controller
     public function replyStore(BoardRequest $request)
     {
         //boardテーブルに挿入する
-        $lastInsertBoardId = $this->insertBoard($request->post_text);
+        $lastInsertBoardId = \Util::insertBoard($request->post_text);
 
         //返信なのでreplyテーブルにinsertする
         $reply = new Reply;
@@ -236,53 +236,12 @@ class BoardController extends Controller
         
         //投稿に画像があれば保存する
         if (!empty($request->image)) {
-            $this->imageSave($lastInsertBoardId, $request);
+            \Util::boardImageStore($lastInsertBoardId, $request);
         }
 
         return redirect("/");
     }
 
-    /************************************************
-     * 投稿をBoardテーブルにINSERTする
-     * @param  $post_text 投稿テキスト
-     * @return $board->id BoardテーブルにINSERTした時のID
-     ************************************************/
-    public function insertBoard($post_text)
-    {
-        //ログイン中のユーザ名を取得する
-        $user = Auth::user();
 
-        //現在日時を取得する
-        date_default_timezone_set('Asia/Tokyo');
-        $today = date("Y-m-d H:i:s");
 
-        //投稿内容をinsertする
-        $board = new Board;
-       
-        //画像のみの投稿の場合は空文字にする
-        if(empty($post_text)){
-            $post_text = "";
-        }
-
-        //Boardテーブルに書き込む
-        $board->post_text = $post_text;
-        $board->send_date = $today;
-        $board->user_id = $user->id;
-        $board->save();
-
-        return $board->id;
-    }
-
-    /************************************************
-     * 投稿画像を保存する
-     * @param  $id 投稿ID
-     * @param  $request->image 投稿画像
-     * @return void
-     ************************************************/
-    public function imageSave($id, $request)
-    {
-        $boardImageFolder = \Config::get('filepath.boardImageFolder');
-
-        $request->image->storeAs('public/',$boardImageFolder . $id . '.' .$request->image->guessExtension());
-    }
 }
