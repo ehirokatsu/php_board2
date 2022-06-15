@@ -5,11 +5,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/user', 'App\Http\Controllers\UserController@user');
-    
-    Route::put('/user', 'App\Http\Controllers\UserController@userUpdate');
+    Route::get('/user/{id}/edit', 'App\Http\Controllers\Auth\RegisterController@edit')->where('id', '[0-9]+');;
+ 
+    Route::put('/user/{id}', 'App\Http\Controllers\Auth\RegisterController@update')->where('id', '[0-9]+');;
 
-    Route::delete('/{id}/user', 'App\Http\Controllers\UserController@userDestroy')->where('id', '[0-9]+');
+    Route::delete('/user/{id}', 'App\Http\Controllers\Auth\RegisterController@destroy')->where('id', '[0-9]+');
+
 
     Route::get('/', 'App\Http\Controllers\BoardController@index');
 
@@ -29,14 +30,3 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/replyStore', 'App\Http\Controllers\BoardController@replyStore');
 });
-/*
-Route::get('/home', 'App\Http\Controllers\HomeController@index');
-
-Route::resource('/', 'App\Http\Controllers\boardController', 
-['only' => ['index', 'show', 'create', 'edit', 'store', 'destroy', 'update']])->middleware('auth');
-
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-*/
-

@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Reply;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\BoardRequest;
-use Illuminate\Support\Facades\Auth;
 
 
 class BoardController extends Controller
@@ -23,7 +21,7 @@ class BoardController extends Controller
     {
         //\Util::hello();
         //ログインユーザ情報を取得する
-        $user = Auth::user();
+        $user = \Auth::user();
 
         //投稿された順番に変更し、1ページ10投稿まで表示する
         $boards = Board::with('user')->get();
@@ -48,7 +46,7 @@ class BoardController extends Controller
         $board = board::findOrFail($id);
 
         //Navバー表示のためログインユーザ情報を渡す
-        $user = Auth::user();
+        $user = \Auth::user();
 
         $param = ['board' => $board, 'user' => $user];
         return view('/show', $param);
@@ -62,7 +60,7 @@ class BoardController extends Controller
     public function create()
     {
         //ログインユーザ情報を取得する
-        $user = Auth::user();
+        $user = \Auth::user();
 
         // 空の$boardを取得する
         $board = new board();
@@ -99,7 +97,7 @@ class BoardController extends Controller
     public function edit($id)
     {
         //ログインユーザ情報を取得する
-        $user = Auth::user();
+        $user = \Auth::user();
 
         //選択した投稿のIDから行を取得する
         $board = board::findOrFail($id);
@@ -148,10 +146,10 @@ class BoardController extends Controller
         if (!empty($request->image)) {
 
             //すでに画像投稿されている場合
-            if (Storage::disk('local')->exists($boardImagePath)) {
+            if (\Storage::disk('local')->exists($boardImagePath)) {
 
                 //前の画像を削除する
-                Storage::disk('local')->delete($boardImagePath);
+                \Storage::disk('local')->delete($boardImagePath);
             }
 
             //新しい投稿画像を保存する
@@ -161,10 +159,10 @@ class BoardController extends Controller
         //画像削除チェックボックスがONなら画像を削除する
         //$request->image_deleteにはvalue値が格納される
         if ($request->image_delete
-         && Storage::disk('local')->exists($boardImagePath)
+         && \Storage::disk('local')->exists($boardImagePath)
          ) {
             //投稿していた画像を削除する
-            Storage::disk('local')->delete($boardImagePath);
+            \Storage::disk('local')->delete($boardImagePath);
         }
         
         return redirect("/");
@@ -191,9 +189,9 @@ class BoardController extends Controller
         $boardImagePath = 'public/' . $boardImageFolder . $imageName;
 
         //投稿に画像があれば削除する
-        if (Storage::disk('local')->exists($boardImagePath)) {
+        if (\Storage::disk('local')->exists($boardImagePath)) {
 
-            Storage::disk('local')->delete($boardImagePath);
+            \Storage::disk('local')->delete($boardImagePath);
         }
 
         return redirect("/");
@@ -211,7 +209,7 @@ class BoardController extends Controller
         $board = Board::findOrFail($id);
 
         //Navバー表示のためログインユーザ情報を渡す
-        $user = Auth::user();
+        $user = \Auth::user();
         $param = ['board' => $board, 'user' => $user];
 
         return view('/replyShow', $param);

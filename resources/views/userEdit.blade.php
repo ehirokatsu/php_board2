@@ -9,17 +9,12 @@
           </div>
           <div class="card-body">
             <div class="row mb-3">
-              @if (session('message'))
-              <div class="alert alert-success">
-                  {{ session('message') }}
-              </div>
-              @endif
               <ui>
                 <li>更新したい項目を入力して更新ボタンを押してください。</li>
                 <li>パスワードを変更する時は、パスワード項目とパスワード確認項目の両方を入力してください。</li>
               </ui>
             </div>
-            <form method="POST" action="/user" enctype="multipart/form-data">
+            <form method="POST" action="/user/{{ $user->id }}" enctype="multipart/form-data">
               @csrf
               @method('PUT')
               <!--自分のメールアドレスを検証から除外する用-->
@@ -119,7 +114,7 @@
                 </div>
             </form>
                 <div class="col-md-3">
-                  <form method="POST" action="/{{ $user->id }}/user" enctype="multipart/form-data">
+                  <form method="POST" action="/user/{{ $user->id }}" enctype="multipart/form-data">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-delete">
