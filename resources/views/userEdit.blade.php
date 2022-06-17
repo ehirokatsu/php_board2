@@ -42,9 +42,9 @@
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('現在のパスワード') }}</label>
+                <label for="current_password" class="col-md-4 col-form-label text-md-end">{{ __('現在のパスワード') }}</label>
                 <div class="col-md-6">
-                  <input id="password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" autocomplete="new-password">
+                  <input id="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" autocomplete="new-password">
                   @error('current_password')
                     <span class="invalid-feedback" role="alert">
                       <strong>{{ $message }}</strong>
@@ -55,7 +55,7 @@
               <div class="row mb-3">
                 <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('新しいパスワード') }}</label>
                 <div class="col-md-6">
-                  <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
+                  <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password">
                   @error('password')
                     <span class="invalid-feedback" role="alert">
                       <strong>{{ $message }}</strong>
@@ -66,7 +66,7 @@
               <div class="row mb-3">
                 <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('新しいパスワード確認') }}</label>
                 <div class="col-md-6">
-                  <input id="password-confirm" type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
+                  <input id="password-confirm" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation">
                   @error('password_confirmation')
                     <span class="invalid-feedback" role="alert">
                       <strong>{{ $message }}</strong>

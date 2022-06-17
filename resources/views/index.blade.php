@@ -20,7 +20,7 @@
 		<div class="col-8 col-lg-5 border border-start-0" style="padding:10px">
 			<div class="row">
         <!--ユーザー名表示用-->
-				<div class="col-lg-3">
+		  	<div class="col-lg-3">
           <!--名前は左揃えにする-->
           <div class="text-start font-weight-bold fs-4">
             {{ $board->user->name }}

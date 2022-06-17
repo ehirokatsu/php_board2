@@ -29,6 +29,8 @@ class UserRequest extends FormRequest
             'email' => 'nullable|string|email|max:255|unique:users,email',
             'current_password' => 'nullable|required_with:password|string|min:8',
             'password' => 'nullable|required_with:current_password|string|min:8|confirmed',
+            'password_confirmation' => 'nullable|required_with:
+            password|string|min:8',
             'image' => 'nullable|image|mimes:jpg,png,svg,gif|max:1024',
         ];
 
@@ -56,6 +58,9 @@ class UserRequest extends FormRequest
             'password.min' => 'パスワードは8文字以上で入力してください',
             'password.required_with' => '新しいパスワードを入力してください。',
             'password.confirmed' => 'パスワード確認項目と一致しません',
+            'password_confirmation.min' => 'パスワードは8文字以上で入力してください',
+            'password_confirmation.string' => 'パスワードは文字列で入力してください',
+            'password_confirmation.required_with' => '新しいパスワードを入力してください。',
             'image.image' => '画像ファイルを選択してください',
             'image.mimes' => '指定された拡張子（JPG,PNG,GIF,SVG）ではありません。',
             'image.max' => '画像は1MB以下を選択してください。',
