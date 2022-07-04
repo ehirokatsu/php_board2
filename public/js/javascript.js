@@ -6,6 +6,8 @@ $(document).on('change', ':file', function() {
 
     var files = !!this.files ? this.files : [];
     if (!files.length || !window.FileReader) {
+        //選択ダイアログでキャンセルを押下したら画像を非表示にする
+        $('.imagePreviewPre').css('display', 'none');
         return;
     }
     if (/^image/.test( files[0].type)){
@@ -18,6 +20,7 @@ $(document).on('change', ':file', function() {
 
             //画像プレビュー用クラスを追加する
             $('.imagePreviewPre').addClass('imagePreview');
+            $('.imagePreviewPre').css('display', '');
 
             //選択した画像をimg要素として追加する
             var add = '<img class="img-create" src="'+this.result+'">';
