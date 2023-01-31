@@ -28,21 +28,32 @@
         </div>
       </div>
       <!--投稿テキスト表示用-->
-      <!--新規投稿、編集画面とで分ける-->
+      <!--新規投稿、編集画面、返信画面とで分ける-->
       @if($target === 'store')
       <form action="/" method="post" enctype="multipart/form-data">
       @elseif($target === 'update')
       <form action="/{{ $board->id }}" method="post" enctype="multipart/form-data">
         @method('PUT')
+      @elseif($target === 'reply')
+        <form action="/replyStore" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="_src_id" value="{{ $board->id }}">
       @endif
       <div class="row">
         @csrf
         <div class="form-group">
-          <textarea class="form-control" name="post_text"  value="" cols="50" rows="6" maxlength="140" style="font-size:130%; resize: none;">{{ $board->post_text }}</textarea>
+        @if($target === 'update')
+          <textarea class="form-control" name="post_text"  value="" cols="50" rows="6"
+           maxlength="140" style="font-size:130%; resize: none;">{{ $board->post_text }}</textarea>
+        @elseif($target === 'store' || $target === 'reply')
+          <textarea class="form-control" name="post_text"  value="" cols="50" rows="6"
+           maxlength="140" style="font-size:130%; resize: none;"></textarea>
+        @endif
         </div>
       </div>
       <!--投稿画像表示用-->
       <div class="row" style="padding:15px;">
+
+      @if($target === 'store' || $target === 'update')
         <!--画像プレビュー表示用ダミー-->
         <div class="">
         </div>
@@ -55,14 +66,17 @@
           </figure>
           </div>
         </div>
+      @elseif($target === 'reply')
+        <div class="imagePreviewPre">
+        </div>
+      @endif
       </div>
       <!--各ボタン表示用-->
       <div class="row">
         <div class="col-3 col-lg-3 d-flex align-items-center justify-content-center">
           <label class="input-group-btn">
             <span class="btn btn-info">
-              画像
-              <input type="file" name="image" style="display:none" class="uploadFile">
+              画像<input type="file" name="image" style="display:none" class="uploadFile">
             </span>
           </label>
         </div>
