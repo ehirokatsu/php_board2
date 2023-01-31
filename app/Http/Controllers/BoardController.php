@@ -19,7 +19,6 @@ class BoardController extends Controller
      ************************************************/
     public function index(Request $request)
     {
-        //\Util::hello();
         //ログインユーザ情報を取得する
         $user = \Auth::user();
 
@@ -77,7 +76,6 @@ class BoardController extends Controller
      ************************************************/
     public function store(BoardRequest $request)
     {
-
         //boardテーブルに挿入する
         $lastInsertBoardId = \Util::insertBoard($request->post_text);
 

@@ -49,9 +49,7 @@
           <!--返信元投稿があれば表示する-->
           @if(!empty($board->reply->src_post_id))
             <a href="/{{ $board->reply->src_post_id }}" class="btn btn-light">
-              <span class="small text-secondary">
-                返信先
-              </span>
+              <span class="small text-secondary">返信先</span>
             </a>
           @endif
           </div>
