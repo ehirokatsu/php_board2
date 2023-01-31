@@ -73,7 +73,7 @@ class RegisterController extends Controller
         $user->save();
 
         //configから保存場所を取得する
-        $userImagePath = \Config::get('filepath.userImagePath');
+        $userImagePath = \Config::get('filepath.userImageFolder');
 
         //画像保存
         if (!empty($data['image'])) {
