@@ -57,7 +57,7 @@ $(function(){
 $(function (){
     $(".btn-delete").click(function(){
 
-        if(confirm("投稿を削除します。よろしいですか？")){
+        if(confirm("削除します。よろしいですか？")){
             // そのままsubmit処理を実行（※削除）
         }else{
             // キャンセル

@@ -7,6 +7,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/user/{id}/edit', 'App\Http\Controllers\Auth\RegisterController@edit')->where('id', '[0-9]+');;
  
+    Route::get('/user/{id}', 'App\Http\Controllers\Auth\RegisterController@update')->where('id', '[0-9]+');;
     Route::put('/user/{id}', 'App\Http\Controllers\Auth\RegisterController@update')->where('id', '[0-9]+');;
 
     Route::delete('/user/{id}', 'App\Http\Controllers\Auth\RegisterController@destroy')->where('id', '[0-9]+');
