@@ -8,7 +8,6 @@ use App\Models\Reply;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BoardRequest;
 
-
 class BoardController extends Controller
 {
 
@@ -19,16 +18,11 @@ class BoardController extends Controller
      ************************************************/
     public function index(Request $request)
     {
-        //ログインユーザ情報を取得する
-        $user = \Auth::user();
 
-        //投稿された順番に変更し、1ページ10投稿まで表示する
-        $boards = Board::with('user')->get();
-        $boards = Board::with('reply')->get();
-        $boards = Board::orderBy('id', 'desc')->simplePaginate(10);
+    $boardService = app('BoardService');
 
-        $param = ['boards' => $boards, 'user' => $user];
-
+        $param = $boardService->index();
+        
         return view('/index',$param);
     }
 
