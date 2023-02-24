@@ -7,9 +7,16 @@ use App\Models\Board;
 use App\Models\Reply;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BoardRequest;
+use App\Http\Services\BoardService;
+use App\Http\Repositories\BoardRepositoryInterface;
 
 class BoardController extends Controller
 {
+
+    public function __construct(BoardService $boardService)
+    {
+        $this->boardService = $boardService;
+    }
 
     /************************************************
      * 一覧画面の表示
@@ -18,11 +25,9 @@ class BoardController extends Controller
      ************************************************/
     public function index(Request $request)
     {
+        //boardService = app('BoardService');
+        $param = $this->boardService->index();
 
-    $boardService = app('BoardService');
-
-        $param = $boardService->index();
-        
         return view('/index',$param);
     }
 
@@ -33,15 +38,7 @@ class BoardController extends Controller
      ************************************************/
     public function show($id)
     {
-
-        //選択した投稿のIDから行を取得する
-        $board = Board::with('user')->get();
-        $board = board::findOrFail($id);
-
-        //Navバー表示のためログインユーザ情報を渡す
-        $user = \Auth::user();
-
-        $param = ['board' => $board, 'user' => $user];
+        $param = $this->boardService->show($id);
         return view('/show', $param);
     }
 
@@ -52,13 +49,7 @@ class BoardController extends Controller
      ************************************************/
     public function create()
     {
-        //ログインユーザ情報を取得する
-        $user = \Auth::user();
-
-        // 空の$boardを取得する
-        $board = new board();
-
-        $param = ['board' => $board, 'user' => $user];
+        $param = $this->boardService->create();
         return view('/create', $param);
     }
 
@@ -70,14 +61,8 @@ class BoardController extends Controller
      ************************************************/
     public function store(BoardRequest $request)
     {
-        //boardテーブルに挿入する
-        $lastInsertBoardId = \Util::insertBoard($request->post_text);
 
-        //画像も投稿されていれば保存する
-        if (!empty($request->image)) {
-            \Util::boardImageStore($lastInsertBoardId, $request);
-        }
-
+        $this->boardService->store($request->post_text, $request->image);
         return redirect("/");
     }
 
@@ -88,14 +73,8 @@ class BoardController extends Controller
      ************************************************/
     public function edit($id)
     {
-        //ログインユーザ情報を取得する
-        $user = \Auth::user();
+        $param = $this->boardService->edit($id);
 
-        //選択した投稿のIDから行を取得する
-        $board = board::findOrFail($id);
-  
-        $param = ['board' => $board, 'user' => $user];
-        
         return view('/edit', $param);
     }
 
@@ -108,55 +87,12 @@ class BoardController extends Controller
      ************************************************/
     public function update(BoardRequest $request, $id)
     {
-        //現在日時を取得する
-        date_default_timezone_set('Asia/Tokyo');
-        $today = date("Y-m-d H:i:s");
-
-        //選択した投稿のIDから行を取得する
-        $board = board::findOrFail($id);
-
         //画像のみの投稿の場合は空文字にする
         if(empty($request->post_text)){
             $request->post_text = "";
         }
+        $this->boardService->update($request->post_text, $id, $request->image, $request->image_delete);
 
-        //Boardテーブルに上書きする
-        $board->post_text = $request->post_text;
-        $board->send_date = $today;
-        $board->save();
-
-        //configから投稿画像の保存フォルダーを取得する
-        $boardImageFolder = \Config::get('filepath.boardImageFolder');
-
-        //投稿画像のファイル名を取得する
-        $imageName = \Util::getImageName($id, $boardImageFolder);
-
-        //投稿画像の保存場所
-        $boardImagePath = 'public/' . $boardImageFolder . $imageName;
-
-        //画像がアップロードされている場合
-        if (!empty($request->image)) {
-
-            //すでに画像投稿されている場合
-            if (\Storage::disk('local')->exists($boardImagePath)) {
-
-                //前の画像を削除する
-                \Storage::disk('local')->delete($boardImagePath);
-            }
-
-            //新しい投稿画像を保存する
-            \Util::boardImageStore($board->id, $request);
-        }
-
-        //画像削除チェックボックスがONなら画像を削除する
-        //$request->image_deleteにはvalue値が格納される
-        if ($request->image_delete
-         && \Storage::disk('local')->exists($boardImagePath)
-         ) {
-            //投稿していた画像を削除する
-            \Storage::disk('local')->delete($boardImagePath);
-        }
-        
         return redirect("/");
     }
 
@@ -167,24 +103,7 @@ class BoardController extends Controller
      ************************************************/
     public function destroy($id)
     {
-        //configから投稿画像の保存フォルダーを取得する
-        $boardImageFolder = \Config::get('filepath.boardImageFolder');
-
-        //投稿を削除する
-        $board = board::findOrFail($id);
-        $board->delete();
-
-        //投稿画像のファイル名を取得する
-        $imageName = \Util::getImageName($id, $boardImageFolder);
-
-        //投稿画像の保存場所
-        $boardImagePath = 'public/' . $boardImageFolder . $imageName;
-
-        //投稿に画像があれば削除する
-        if (\Storage::disk('local')->exists($boardImagePath)) {
-
-            \Storage::disk('local')->delete($boardImagePath);
-        }
+        $this->boardService->destroy($id);
 
         return redirect("/");
     }
@@ -196,13 +115,7 @@ class BoardController extends Controller
      ************************************************/
     public function replyShow($id)
     {
-        //先にwithで結合してからfindしないとエラーになる
-        $board = Board::with('user')->get();
-        $board = Board::findOrFail($id);
-
-        //Navバー表示のためログインユーザ情報を渡す
-        $user = \Auth::user();
-        $param = ['board' => $board, 'user' => $user];
+        $param = $this->boardService->replyShow($id);
 
         return view('/replyShow', $param);
     }
@@ -216,19 +129,7 @@ class BoardController extends Controller
      ************************************************/
     public function replyStore(BoardRequest $request)
     {
-        //boardテーブルに挿入する
-        $lastInsertBoardId = \Util::insertBoard($request->post_text);
-
-        //返信なのでreplyテーブルにinsertする
-        $reply = new Reply;
-        $reply->post_id = $lastInsertBoardId;
-        $reply->src_post_id = $request->_src_id;
-        $reply->save();
-        
-        //投稿に画像があれば保存する
-        if (!empty($request->image)) {
-            \Util::boardImageStore($lastInsertBoardId, $request);
-        }
+        $this->boardService->replyStore($request->post_text, $request->_src_id, $request->image);
 
         return redirect("/");
     }

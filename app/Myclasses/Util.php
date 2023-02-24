@@ -128,17 +128,25 @@ class Util
        return $board->id;
    }
 
+/*
 
-    /************************************************
-     * 投稿画像を保存する
-     * @param  $id 投稿ID
-     * @param  $request 投稿画像
-     * @return void
-     ************************************************/
     public function boardImageStore($id, $request)
     {
         $boardImageFolder = \Config::get('filepath.boardImageFolder');
 
         $request->image->storeAs('public/',$boardImageFolder . $id . '.' .$request->image->guessExtension());
+    }
+    */
+        /************************************************
+     * 投稿画像を保存する
+     * @param  $id 投稿ID
+     * @param  $request 投稿画像
+     * @return void
+     ************************************************/
+    public function boardImageStore($image, $filename)
+    {
+        $boardImageFolder = \Config::get('filepath.boardImageFolder');
+
+        $image->storeAs('public/',$boardImageFolder . $filename);
     }
 }
