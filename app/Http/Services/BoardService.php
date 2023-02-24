@@ -3,13 +3,18 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\BoardRepositoryInterface;
+use App\Http\Services\ImageLibrary;
 
 class BoardService
 {
 
-    public function __construct(BoardRepositoryInterface $boardRepositoryInterface)
+    public function __construct(
+        BoardRepositoryInterface $boardRepositoryInterface,
+        ImageLibrary $imageLibrary
+        )
     {
         $this->boardRepositoryInterface = $boardRepositoryInterface;
+        $this->imageLibrary = $imageLibrary;
     }
 
     /************************************************
@@ -71,7 +76,7 @@ class BoardService
 
         //画像も投稿されていれば保存する
         if (!empty($image)) {
-            \Util::boardImageStore($image, $lastInsertBoardId. '.' .$image->guessExtension());
+            $this->imageLibrary->boardImageStore($image, $lastInsertBoardId. '.' .$image->guessExtension());
         }
 
         return;
@@ -111,7 +116,7 @@ class BoardService
         $boardImageFolder = \Config::get('filepath.boardImageFolder');
 
         //投稿画像のファイル名を取得する
-        $imageName = \Util::getImageName($id, $boardImageFolder);
+        $imageName = $this->imageLibrary->getImageName($id, $boardImageFolder);
 
         //投稿画像の保存場所
         $boardImagePath = 'public/' . $boardImageFolder . $imageName;
@@ -127,7 +132,7 @@ class BoardService
             }
 
             //新しい投稿画像を保存する
-            \Util::boardImageStore($image, $id. '.' .$image->guessExtension());
+            $this->imageLibrary->boardImageStore($image, $id. '.' .$image->guessExtension());
 
         }
 
@@ -158,7 +163,7 @@ class BoardService
 
 
         //投稿画像のファイル名を取得する
-        $imageName = \Util::getImageName($id, $boardImageFolder);
+        $imageName = $this->imageLibrary->getImageName($id, $boardImageFolder);
 
         //投稿画像の保存場所
         $boardImagePath = 'public/' . $boardImageFolder . $imageName;
@@ -202,7 +207,7 @@ class BoardService
 
         //画像も投稿されていれば保存する
         if (!empty($image)) {
-            \Util::boardImageStore($image, $lastInsertBoardId. '.' .$image->guessExtension());
+            $this->imageLibrary->boardImageStore($image, $lastInsertBoardId. '.' .$image->guessExtension());
         }
 
         return redirect("/");

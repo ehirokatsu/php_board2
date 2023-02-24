@@ -5,9 +5,16 @@ namespace App\Http\Repositories;
 use App\Models\Board;
 use App\Models\Reply;
 use Illuminate\Support\Facades\DB;
+use App\Http\Repositories\BoardOperate;
 
 class BoardRepository implements BoardRepositoryInterface
 {
+    public function __construct(BoardOperate $boardOperate)
+    {
+        $this->boardOperate = $boardOperate;
+    }
+
+
     /************************************************
      * 一覧画面の表示
      * @param 
@@ -51,7 +58,7 @@ class BoardRepository implements BoardRepositoryInterface
     public function store($post_text)
     {
         //boardテーブルに挿入する
-        $lastInsertBoardId = \Util::insertBoard($post_text);
+        $lastInsertBoardId = $this->boardOperate->insertBoard($post_text);
 
         return $lastInsertBoardId;
     }
@@ -127,7 +134,7 @@ class BoardRepository implements BoardRepositoryInterface
     public function replyStore($post_text, $_src_id)
     {
         //boardテーブルに挿入する
-        $lastInsertBoardId = \Util::insertBoard($post_text);
+        $lastInsertBoardId = $this->boardOperate->insertBoard($post_text);
 
         //返信なのでreplyテーブルにinsertする
         $reply = new Reply;
