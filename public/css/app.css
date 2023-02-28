@@ -11286,3 +11286,63 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/*indexページでの画像の表示範囲*/
+.img-index {
+  max-width: 100%;
+  max-height: 500px;
+}
+
+/*showページでの画像の表示範囲*/
+.img-show {
+  max-width: 100%;
+  max-height: 800px;
+}
+
+/*create、editページでの画像の表示範囲*/
+.img-create {
+  max-width: 100%;
+  max-height: 500px;
+}
+
+/*画像投稿時のプレビュー用クラス
+ *imagePreviewの追加先ダミー
+*/
+/*投稿編集時、画像を追加した時に既存画像を非表示にするためのダミー*/
+/*画像投稿時のプレビュー用*/
+.imagePreview {
+  width: 500px;
+  height: 500px;
+  background-position: center center;
+  background-size: cover;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+}
+
+/*ナビゲーションバー　ユーザアイコン*/
+.icon {
+  position: relative;
+}
+
+/*TOPページ　ユーザアイコンにマウスオーバーした時に表示する*/
+.user-info {
+  width: 300px;
+  padding: 0.3em 1em;
+  position: absolute;
+  top: 40px;
+  color: rgb(0, 0, 0);
+  background-color: #f5fcff;
+  border-radius: 0.6em;
+  z-index: 100;
+  box-shadow: 5px 5px 5px #66b8d8;
+}
+
+.user-info::after {
+  color: rgb(0, 0, 0);
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #f5fcff;
+  border-left: 10px solid transparent;
+}

@@ -1,12 +1,9 @@
 <?php
-namespace App\MyClasses;
 
-use Illuminate\Support\Facades\Auth;
-use App\Models\Board;
+namespace App\Http\Services;
 
-class Util
+class ImageLibrary
 {
-
     /************************************************
      * 画像の拡張子を含むファイル名を取得する
      * @param $id ユーザー、または投稿ＩＤ
@@ -96,48 +93,8 @@ class Util
 
         }
     }
-    
+
     /************************************************
-    * 投稿をBoardテーブルにINSERTする
-    * @param  $post_text 投稿テキスト
-    * @return $board->id BoardテーブルにINSERTした時のID
-    ************************************************/
-   public function insertBoard($post_text)
-   {
-       //ログイン中のユーザ名を取得する
-       $user = Auth::user();
-
-       //現在日時を取得する
-       date_default_timezone_set('Asia/Tokyo');
-       $today = date("Y-m-d H:i:s");
-
-       //投稿内容をinsertする
-       $board = new Board;
-      
-       //画像のみの投稿の場合は空文字にする
-       if(empty($post_text)){
-           $post_text = "";
-       }
-
-       //Boardテーブルに書き込む
-       $board->post_text = $post_text;
-       $board->send_date = $today;
-       $board->user_id = $user->id;
-       $board->save();
-
-       return $board->id;
-   }
-
-/*
-
-    public function boardImageStore($id, $request)
-    {
-        $boardImageFolder = \Config::get('filepath.boardImageFolder');
-
-        $request->image->storeAs('public/',$boardImageFolder . $id . '.' .$request->image->guessExtension());
-    }
-    */
-        /************************************************
      * 投稿画像を保存する
      * @param  $id 投稿ID
      * @param  $request 投稿画像
