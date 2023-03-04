@@ -22,9 +22,7 @@
             <li class="nav-item">
               <div class="icon">
                 <!--ユーザー画像を表示する-->
-                <figure>
-                  <img src="{{$user->getLoginUserImageStoragePath()}}" width="50px" height="50px">
-                </figure>
+                @include('parts.userImage')
                 <!--ユーザ画像をマウスオーバーした時に表示する-->
                 <div class="user-info">
                   <span>ユーザ名：{{$user->name}}</span>

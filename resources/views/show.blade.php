@@ -1,19 +1,15 @@
-@extends('layout')
-@extends('nav')
+@extends('parts.layout')
+@extends('parts.nav')
 @section('content')
 <div class="container">
   <div class="row">
-    @include('message')
+    @include('parts.message')
     <!--レイアウト用ダミー-->
     <div class="col-1 col-lg-1">
     </div>
     <!--ユーザー画像表示用-->
     <div class="col-2 col-lg-2 border border-end-0">
-      <div class="row">
-      <figure>
-        <img src="{{$board->getBoardUserImageStoragePath()}}" width="50px" height="50px">
-      </figure>
-      </div>
+    @include('parts.userImage')
     </div>
     <!--投稿内容表示用-->
     <div class="col-8 col-lg-8 border border-start-0" style="padding:10px">

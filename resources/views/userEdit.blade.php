@@ -1,5 +1,5 @@
-@extends('layout')
-@extends('nav')
+@extends('parts.layout')
+@extends('parts.nav')
 @section('content')
 <div class="container">
   <div class="row justify-content-center">

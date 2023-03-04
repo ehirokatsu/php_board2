@@ -1,6 +1,6 @@
-@extends('layout')
+@extends('parts.layout')
 @section('content')
-@extends('nav')
+@extends('parts.nav')
 <!--投稿毎に繰り返す-->
 @foreach($boards as $board)
 <div class="container">
@@ -10,11 +10,7 @@
     </div>
     <!--ユーザー画像表示用-->
     <div class="col-2 col-lg-1 border border-end-0">
-      <div class="row">
-        <figure>
-          <img src="{{$board->getBoardUserImageStoragePath()}}" width="50px" height="50px">
-        </figure>
-      </div>
+    @include('parts.userImage')
     </div>
     <!--投稿内容表示用-->
 		<div class="col-8 col-lg-5 border border-start-0" style="padding:10px">
