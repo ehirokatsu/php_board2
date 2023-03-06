@@ -30,4 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/{id}/replyShow', 'App\Http\Controllers\BoardController@replyShow')->where('id', '[0-9]+');
 
     Route::post('/replyStore', 'App\Http\Controllers\BoardController@replyStore');
+
+    Route::get('/search', 'App\Http\Controllers\BoardController@search');
+
+
 });

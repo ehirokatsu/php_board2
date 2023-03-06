@@ -134,6 +134,16 @@ class BoardController extends Controller
         return redirect("/");
     }
 
+    /************************************************
+     * 検索画面
+     * @param  
+     * @return 
+     ************************************************/
+    public function search(Request $request)
+    {
+        $param = $this->boardService->search($request->searchWord);
 
+        return view('/search',$param);
+    }
 
 }

@@ -212,4 +212,17 @@ class BoardService
 
         return redirect("/");
     }
+    /************************************************
+     * 検索画面
+     * @param  
+     * @return 
+     ************************************************/
+    public function search($searchWord)
+    {
+        $user = \Auth::user();
+        $boards = $this->boardRepositoryInterface ->search($searchWord);
+        $param = ['boards' => $boards, 'user' => $user];
+
+        return $param;
+    }
 }

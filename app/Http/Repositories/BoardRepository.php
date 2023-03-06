@@ -144,7 +144,19 @@ class BoardRepository implements BoardRepositoryInterface
 
         return $lastInsertBoardId;
     }
-
+    /************************************************
+     * 検索画面
+     * @param  
+     * @return 
+     ************************************************/
+    public function search($searchWord)
+    {
+        //投稿された順番に変更し、1ページ10投稿まで表示する
+        $boards = Board::with('user')->get();
+        $boards = Board::with('reply')->get();
+        $boards = Board::where('post_text','LIKE', '%'.$searchWord.'%')->orderBy('id', 'desc')->simplePaginate(10);
+        return $boards;
+    }
 
 }
 

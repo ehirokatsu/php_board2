@@ -15,6 +15,9 @@
             <li class="nav-item">
               <a class="nav-link" href="/create">新規投稿</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/search">検索</a>
+            </li>
             <div></div>
             <li class="nav-item">
                 <a class="nav-link" href="/user/{{ $user->id }}/edit">設定</a>
