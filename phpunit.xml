@@ -27,6 +27,8 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+
+        <!-- テスト用データベース名を指定 -->
         <env name="DB_DATABASE" value="laravel-test"/>
     </php>
 </phpunit>

@@ -7,9 +7,11 @@ use Tests\TestCase;
 
 //factoryで使用
 use App\Models\User;
+use App\Models\Board;
 
 class ExampleTest extends TestCase
 {
+    //テスト用データベースを初期化する。これがないと以前のテストデータが残る
     use RefreshDatabase;
 
 
@@ -44,14 +46,44 @@ class ExampleTest extends TestCase
         $response = $this->actingAs($user)->get('/search');
         $response->assertStatus(200);
 
-        
-
         //存在しないページは404エラーとなること
         $response = $this->get('/no_route');
         $response->assertStatus(404);
 
+        //テストデータを生成する
+        User::factory()->create([
+            'name' => 'AAA',
+            'email' => 'BBB@CCC.com',
+            'password' => 'AAAABBBB',
+        ]);
+
+        //生成したテストデータがDBに登録されていること
+        $this->assertDatabaseHas('users', [
+            'name' => 'AAA',
+            'email' => 'BBB@CCC.com',
+            'password' => 'AAAABBBB',
+        ]);
 
 
+        //ユーザー編集画面に遷移できること
+        $response = $this->actingAs($user)->get('/user/1/edit');
+        $response->assertStatus(200);
 
+        //投稿データを100個生成する
+        Board::factory()->count(100)->create();
+        $num = rand(1, 100);
+        
+        //作成したテストデータをランダムで選択し詳細画面に遷移できること
+        $response = $this->actingAs($user)->get('/'.$num);
+        $response->assertStatus(200);
+
+        //作成したテストデータをランダムで選択し編集画面に遷移できること
+        $response = $this->actingAs($user)->get('/'.$num.'/edit');
+        $response->assertStatus(200);
+
+        //作成したテストデータをランダムで選択し返信画面に遷移できること
+        $response = $this->actingAs($user)->get('/'.$num.'/replyShow');
+        $response->assertStatus(200);
+        
     }
 }
