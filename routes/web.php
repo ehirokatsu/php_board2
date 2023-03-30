@@ -33,5 +33,4 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/search', 'App\Http\Controllers\BoardController@search');
 
-
 });
