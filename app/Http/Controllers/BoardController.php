@@ -13,6 +13,12 @@ use App\Http\Repositories\BoardRepositoryInterface;
 class BoardController extends Controller
 {
 
+    /************************************************
+     * コンストラクタ
+     * @param BoardServiceをコンストラクタインジェクション。
+     * AppServiceProvider.phpにて定義。
+     * @return 
+     ************************************************/
     public function __construct(BoardService $boardService)
     {
         $this->boardService = $boardService;
