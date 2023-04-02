@@ -15,7 +15,7 @@ class BoardController extends Controller
 
     /************************************************
      * コンストラクタ
-     * @param BoardServiceをコンストラクタインジェクション。
+     * @param BoardServiceをコンストラクタインジェクション。編集中
      * AppServiceProvider.phpにて定義。
      * @return 
      ************************************************/
