@@ -88,13 +88,17 @@ class ExampleTest extends TestCase
         Storage::fake('test_images');
         $image = UploadedFile::fake()->image('post.jpg');
         $data = [
-            'post_text' => 'testtest',
+            'post_text' => '',
             'image' => $image,
 
         ];
         $response = $this->actingAs($user)->post('/', $data);
+        $response->assertRedirect('/');
+        $response->assertStatus(302);
+        //バリデーションエラーが発生しないこと
+        $response->assertValid(['post_text', 'image']);
         //投稿を挿入したときのIDが名前になる。どう付与する？
-        //Storage::disk('images')->assertExists($image->hashName());
+        //Storage::disk('test_images')->assertExists($image->hashName());
 
 
 
