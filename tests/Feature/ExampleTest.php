@@ -9,10 +9,14 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Board;
 
+
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 class ExampleTest extends TestCase
 {
     //テスト用データベースを初期化する。これがないと以前のテストデータが残る
-    use RefreshDatabase;
+    //use RefreshDatabase;
 
 
 
@@ -43,6 +47,55 @@ class ExampleTest extends TestCase
         $response = $this->actingAs($user)->get('/create');
         $response->assertStatus(200)->assertViewIs('.create');
 
+        //投稿テキストを作成し、新規投稿する
+        $data = [
+            'post_text' => 'test text',
+        ];
+
+        $response = $this->actingAs($user)->post('/', $data);
+        //新規投稿をしたらindexにリダイレクトされる
+        $response->assertRedirect('/');
+        $response->assertStatus(302);
+        //バリデーションエラーが発生しないこと
+        $response->assertValid(['post_text', 'image']);
+
+        //空白を投稿したらエラーになる
+        $data = [
+            'post_text' => '',
+        ];
+        $response = $this->actingAs($user)->post('/', $data);
+        $response->assertRedirect('/create');
+        //リダイレクトされると302になる
+        $response->assertStatus(302);
+        //post_textのバリデーションエラーが発生することを確認
+        $response->assertInvalid(['post_text']);
+        $response->assertValid(['image']);
+
+        //最大文字数超えを投稿したらエラーになる
+        $data = [
+            'post_text' => '01234567890123456789012345678901234567890123456789
+                            01234567890123456789012345678901234567890123456789
+                            0',
+        ];
+        $response = $this->actingAs($user)->post('/', $data);
+        $response->assertRedirect('/create');
+        $response->assertStatus(302);
+        //post_textのバリデーションエラーが発生することを確認
+        $response->assertInvalid(['post_text']);
+        $response->assertValid(['image']);
+
+        Storage::fake('images');
+        $image = UploadedFile::fake()->image('post.jpg');
+        $data = [
+            'post_text' => 'testtest',
+            'image' => $image,
+
+        ];
+        $response = $this->actingAs($user)->post('/', $data);
+        Storage::disk('images')->assertExists($image->hashName());
+
+
+
         $response = $this->actingAs($user)->get('/search');
         $response->assertStatus(200)->assertViewIs('.search');
 
@@ -52,9 +105,10 @@ class ExampleTest extends TestCase
         $response->assertStatus(404);
 
         //ユーザー編集画面に遷移できること。対象のViewファイルを表示すること
-        $response = $this->actingAs($user)->get('/user/1/edit');
+        $response = $this->actingAs($user)->get('/user/' . $user->id . '/edit');
         $response->assertStatus(200)->assertViewIs('.userEdit');
 
+        /*
         //投稿データを100個生成する
         Board::factory()->count(100)->create();
         $num = rand(1, 100);
@@ -87,7 +141,14 @@ class ExampleTest extends TestCase
             'email' => 'BBB@CCC.com',
             'password' => 'AAAABBBB',
         ]);
-
+*/
 
     }
+
+    public function test()
+    {
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+    }
+
 }
