@@ -225,4 +225,14 @@ class BoardService
 
         return $param;
     }
+
+    /************************************************
+     * IDから投稿データを取得
+     * @param  
+     * @return 
+     ************************************************/
+    public function getBoardDataFromID($id)
+    {
+        return $this->boardRepositoryInterface->getBoardDataFromID($id);
+    }
 }

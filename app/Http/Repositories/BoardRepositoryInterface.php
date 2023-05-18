@@ -19,6 +19,7 @@ interface BoardRepositoryInterface
     public function destroy($id);
     public function replyShow($id);
     public function replyStore($post_text, $_src_id);
+    public function getBoardDataFromID($id);
 
 }
 

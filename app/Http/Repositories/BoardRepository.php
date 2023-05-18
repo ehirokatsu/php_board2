@@ -158,7 +158,17 @@ class BoardRepository implements BoardRepositoryInterface
         return $boards;
     }
 
+    /************************************************
+     * IDから投稿データを取得
+     * @param  
+     * @return 
+     ************************************************/
+    public function getBoardDataFromID($id)
+    {
+        return $board = board::findOrFail($id);;
+    }
 }
+
 
 
 

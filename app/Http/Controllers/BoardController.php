@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\BoardRequest;
 use App\Http\Services\BoardService;
 use App\Http\Repositories\BoardRepositoryInterface;
+use Gate;
+
 
 class BoardController extends Controller
 {
@@ -73,6 +75,12 @@ class BoardController extends Controller
      ************************************************/
     public function edit($id)
     {
+        //投稿データを取得
+        $board = $this->boardService->getBoardDataFromID($id);
+
+        //自分の投稿なら編集可能
+        Gate::authorize('edit', $board);
+
         $param = $this->boardService->edit($id);
 
         return view('/edit', $param);
@@ -87,6 +95,12 @@ class BoardController extends Controller
      ************************************************/
     public function update(BoardRequest $request, $id)
     {
+        //投稿データを取得
+        $board = $this->boardService->getBoardDataFromID($id);
+
+        //自分の投稿なら編集可能
+        Gate::authorize('edit', $board);
+
         //画像のみの投稿の場合は空文字にする
         if(empty($request->post_text)){
             $request->post_text = "";
@@ -103,6 +117,12 @@ class BoardController extends Controller
      ************************************************/
     public function destroy($id)
     {
+        //投稿データを取得
+        $board = $this->boardService->getBoardDataFromID($id);
+
+        //自分の投稿なら編集可能
+        Gate::authorize('edit', $board);
+        
         $this->boardService->destroy($id);
 
         return redirect("/");
